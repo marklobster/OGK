@@ -3,18 +3,35 @@
     # opportunities for random battle encounters with a specific subset
     # of monsters.
 
-import random, battle_system, characters
+import random, battle_system, monsters
 
+# Monster tuples, specific to each path
+north_monsters = (monsters.Pretty_Blob(),
+                  monsters.Gnasher(),
+                  monsters.Nacht_Musik(),
+                  monsters.Sir_Rat())
+east_monsters = (monsters.Goblin(),
+                 monsters.Pretty_Blob(),
+                 monsters.Sir_Rat(),
+                 monsters.Gnasher(),
+                 monsters.Nacht_Musik)
+#south_monsters = (monsters.Hydra_Badger(), monsters.Orc(), monsters.Mega_Troll(), monsters.Ogre_Primo())
+west_monsters = (monsters.Orc(), monsters.Ancient_Technology())
+northeast_monsters = (monsters.Goblin(), monsters.Gnasher())
+northwest_monsters = (monsters.Sir_Rat())
+
+# Path parent class, followed by sub-classes for each village
 class Path(object):
     """ Class for all paths, which are location connecting functions. """
     
     def __init__(self, distance, fight_chance, monster_pool):
         self.distance = distance
         self.fight_chance = fight_chance
-        self.monsters = monster_pool
+        self.monster_pool = monster_pool
         
     def monster_pick(self):
-        random.choice(self.monsters)
+        """ Randomly choose monster from self.monster_pool """
+        random.choice(self.monster_pool)
     
     def go(self, hero, endpoint):
         print("Your journey beginneth.  Press 'I' at any time to use items.")
@@ -44,7 +61,7 @@ class Path(object):
                 # If occurence == monster, update message, print message, start battle
                 if occurence < self.fight_chance:
                     monster = self.monster_pick()
-                    message += " a " + monster.name + " approaches!"
+                    message += " a monster approaches!"
                     print(message)
                     battle = battle_system.Battle(hero, monster)
                     if hero.health:
@@ -63,5 +80,26 @@ class Path(object):
         else:
             return None
 
+class North(Path):
+    """ Connects Shmucksburg and Fiddlestick """
+    def __init__(self):
+        self.distance = 3
+        self.fight_chance = 45
+        self.monster_pool = north_monsters
+
+class East(Path):
+    """  """
+    def __init__(self):
+        self.distance = 3
+        self.fight_chance = 50
+        self.monster_pool = east_monsters
+
+
 # Paths
+north = North()
+east = East()
 test = Path(10, 20, None)
+
+if __name__ == "__main__":
+    print("This is a module for 'Oh Great Knight'.")
+    input("Press enter to exit.")

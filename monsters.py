@@ -2,7 +2,12 @@
 # Mark Lauber
 # June 2013
 
-import characters, packets, random, items
+import characters, random, items
+
+# Item packets for monsters
+easy_monsters = (items.band_aid, items.wood_shield)
+medium_monsters = (items.band_aid, items.rusty_sword, items.wood_shield, items.handmedowns)
+hard_monsters = (items.herb, items.battle_axe, items.green_shield, items.leather)
 
 # Parent Classes
 class Monster(characters.Character):
@@ -39,14 +44,14 @@ class Monster(characters.Character):
 
 class Easy_Monster(Monster):
     # Inherits tactic() from grandparent class characters.Character
-    item_pool = packets.easy
     def __init__(self):
+        self.item_pool = easy_monsters
         self.coins = random.randint(3, 8)
         super(Easy_Monster, self).__init__()
 
 class Medium_Monster(Monster):
     def __init__(self):
-        self.item_pool = packets.medium
+        self.item_pool = medium_monsters
         self.coins = random.randint(13, 18)
         super(Medium_Monster, self).__init__()
 
@@ -61,7 +66,7 @@ class Medium_Monster(Monster):
 
 class Hard_Monster(Monster):
     def __init__(self):
-        self.item_pool = packets.hard
+        self.item_pool = hard_monsters
         self.coins = random.randint(22, 28)
         super(Hard_Monster, self).__init__()
 
@@ -160,6 +165,26 @@ class Nacht_Musik(Medium_Monster):
         else:
             self.shriek(opponent)
 
+class Ancient_Technology(Medium_Monster):
+    def __init__(self):
+        self.name = "Ancient Technology"
+        self.health_max = 70
+        self.weapon = items.flashing_ob
+        self.shield = None
+        self.armor = items.leather
+        super(Ancient_Technology, self).__init__()
+
+# Hard Monsters
+class Mega_Troll(Hard_Monster):
+    def __init__(self):
+        self.name = "Mega Troll"
+        self.health_max = 80
+        self.weapon = items.battle_axe
+        self.shield = items.wood_shield
+        self.armor = items.handmedowns
+        super(Mega_Troll, self).__init__()
+        if items.battle_axe not in self.inventory:
+            self.inventory.append(items.battle_axe)
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")

@@ -62,8 +62,9 @@ gold_ring = Item("Gold Ring", 180, "The wedding ring you \"lost\".")
 # Monster-only weapons
 pseudopod = Weapon("Pseudopod", 0, "Pretty Blob's Weapon", 5, None)
 blunt_object = Weapon("Blunt Object", 0, "Orc's Weapon", 17, None)
-fangs = Weapon("Fangs", 0, "Nasher's Weapon", 18, None)
+fangs = Weapon("Fangs", 0, "Gnasher's Weapon", 18, None)
 talons = Weapon("Talons", 0, "Nacht Musik's Weapon", 14, None)
+flashing_ob = Weapon("Flashing Obelisk", 0, "Ancient Technology's Weapon", 16,None)
 spikes = Weapon("Spikes", 0, "Orcupine's Weapon", 24, None)
 # Player-use weapons
 cheap_dagger = Weapon("Cheap Dagger", 30, "Pointy", 12, "W-0")

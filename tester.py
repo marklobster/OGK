@@ -14,7 +14,7 @@ packet = [items.band_aid, items.battle_axe, items.herb]
 claws = items.Weapon("claws", 0, "", 40, None)
 #monster = characters.Easy_Monster("Evil Dragon", 350, claws, None, None, packet)
 
-monsterz = (monsters.Sir_Rat())
+monsterz = (monsters.Sir_Rat(), monsters.Ancient_Technology())
 monster1 = random.choice(monsterz)
 monster2 = random.choice(monsterz)
 

@@ -176,6 +176,17 @@ R - Run Away""")
     def win(self):
         input("To Victor go the spoils!\n")
 
+class New_Hero(Hero):
+    def __init__(self, name, catchphrase):
+        self.name = name
+        self.catchphrase = catchphrase
+        self.weapon = None
+        self.shield = None
+        self.armor = None
+        self.health_max = 70
+        self.health = 70
+        self.inventory = [items.gold_ring]
+        self.coins = 0
 
 
 #goblin = Easy_Monster("Goblin", 35, items.cheap_dagger, items.wood_shield, None, packets.easy)
