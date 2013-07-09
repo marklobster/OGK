@@ -18,6 +18,7 @@ class Monster(characters.Character):
         self.inventory = []
         self.create_inventory(self.item_pool)
         self.health = self.health_max
+        self.dead = False
 
     def create_inventory(self, pool):
         # For each item in item_pool there is a 1/3 chance it will be added to inventory.
@@ -159,6 +160,7 @@ class Nacht_Musik(Medium_Monster):
         target.lose_health(number)
     
     def tactic(self, opponent):
+        """ A 1\3 chance it will shriek(), otherwise it attacks. """
         number = random.randint(1,3)
         if number < 3:
             self.attack(opponent)

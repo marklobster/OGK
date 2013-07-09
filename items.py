@@ -60,7 +60,7 @@ gold_ring = Item("Gold Ring", 180, "The wedding ring you \"lost\".")
 # Weapons
 # Parameters: name, price, description, power, item_class
 # Monster-only weapons
-pseudopod = Weapon("Pseudopod", 0, "Pretty Blob's Weapon", 5, None)
+pseudopod = Weapon("Pseudopod", 0, "Pretty Blob's Weapon", 7, None)
 blunt_object = Weapon("Blunt Object", 0, "Orc's Weapon", 17, None)
 fangs = Weapon("Fangs", 0, "Gnasher's Weapon", 18, None)
 talons = Weapon("Talons", 0, "Nacht Musik's Weapon", 14, None)

@@ -15,7 +15,7 @@ class Battle(object):
         """ Constructor function initiates battle sequence. """
         self.hero = hero
         self.monster = monster
-        input(self.hero.name + " vs. " + self.monster.name)
+        input("\n\n\t\t\t" + self.hero.name + " vs. " + self.monster.name)
         self.first_strike = self.get_first_strike()
         self.battle_loop()
 

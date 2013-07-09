@@ -4,23 +4,21 @@ import paths
 
 class Location(object):
     """ Super class for village objects. """
-    #def __init__(self):
 
-
-    def get_destination(self):
-        """ Select a destination from this location's menu. """
-        print("Where shall you journey?  (Press enter to cancel.)")
+    def run(self, hero):
+        next_location = self.menu(hero)
+        return next_location
 
     def journey(self, hero, path, endpoint):
         """ Run the selected path.  Return the appropriate new location. """
-        finality = path.go(hero, endpoint)
-        return finality
+        next_location = path.go(hero, endpoint)
+        return next_location
 
-    def run(self, hero):
+    def menu(self, hero):
         """ Run the menu and return the next_location """
         response = ""
         while response != "Q" and response != "J":
-            print("YOU ARE IN " + self.name.upper() + ".")
+            print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 J - JOURNEY
 T - TALK TO VILLAGERS
@@ -40,9 +38,9 @@ Q - QUIT""")
                 # But an unsuccessful journey returns None, which is fed back to
                 # the main_loop, and ends the game.main_loop.
                 if destination:
-                    next_location = self.journey(self.hero, destination[0], destination[1])
+                    next_location = self.journey(hero, destination[0], destination[1])
                 # Otherwise, just return to the location's main menu by
-                # changing resonse from 'J' to the empty string.
+                # changing response from 'J' to the empty string.
                 else:
                     response = ""
             elif response == "T":
@@ -50,7 +48,7 @@ Q - QUIT""")
             elif response == "S":
                 print("shop")
             elif response == "I":
-                self.hero.inventory()
+                hero.inventory()
             elif response == "R":
                 print("Inn")
             elif response == "G":
@@ -69,13 +67,17 @@ class Shmucksburg(Location):
         self.name = "Shmucksburg"
 
     def get_destination(self):
+        """ This function is unique to each Location, so it is not in
+the parent class.  This function gives a menu of destinations.  The user
+selects one.  Then the journey() function is run with the appropriate path
+and endpoint."""
         response = input("""
 Where shall you journey?
 N) Fiddlestick
 E) Cowdump
 S) Wrathful Pass
-W) Valley of Forbidden Objects\n
-Enter the direction or location.  Or press enter to exit.
+W) Valley of Forbidden Objects
+\nEnter the direction or location.  Or press enter to exit.
 """).lower()
         if response == "n" or response == "fiddlestick":
             destination = (paths.north, fiddlestick)
@@ -92,7 +94,7 @@ Enter the direction or location.  Or press enter to exit.
             destination = None
         return destination
     
-    def run(self, hero):
+    def menu(self, hero):
         response = ""
         while response != "Q" and response != "J":
             print("YOU ARE IN " + self.name.upper() + ".")
@@ -134,9 +136,55 @@ Q - QUIT
 class Fiddlestick(Location):
     def __init__(self):
         self.name = "Fiddlestick"
+
+    def get_destination(self):
+        response = input("""
+Where shall you journey?
+NW) Gadgetsburg
+NE) Oldendrab Castle
+S) Shmucksburg
+\nEnter the direction or location.  Or press enter to exit.
+""").lower()
+        if response == "nw" or response == "gadgetsburg":
+            destination = (paths.northwest, gadgetsburg)
+        elif response == "ne" or response == "oldendrab castle":
+            destination = (paths.northeast, oldendrab)
+        elif response == "s" or response == "shmucksburg":
+            destination = (paths.north, shmucksburg)
+        elif response == "":
+            destination = None
+        else:
+            print("\a")
+            destination = None
+        return destination
+
+
+class Cowdump(Location):
+    def __init__(self):
+        self.name = "Cowdump"
+
+    def get_destination(self):
+        response = input("""
+Where shall you journey?
+N) Fiddlestick
+E) Cowdump
+S) Wrathful Pass
+W) Valley of Forbidden Objects
+\nEnter the direction or location.  Or press enter to exit.
+""").lower()
+        if response == "w" or response == "shmuckburg":
+            destination = (paths.east, shmucksburg)
+        elif response == "":
+            destination = None
+        else:
+            print("\a")
+            destination = None
+        return destination
+
     
 shmucksburg = Shmucksburg()
 fiddlestick = Fiddlestick()
+cowdump = Cowdump()
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")

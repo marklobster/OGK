@@ -21,41 +21,20 @@
 
 import characters, locations, introduction
 
-class Test(object):        
-    def __init__(self, message):
-        self.message = message
-    
-    def give_message(self):
-        print(self.message)
-
-    def run(self):
-        self.give_message()
-        next_locale = input("Where to next?")
-        if next_locale == "test1":
-            return test1
-        elif next_locale == "test2":
-            return test2
-        elif next_locale == "test3":
-            return test3
-        elif next_locale == "none":
-            return None
 
 class New_game(object):
     def __init__(self, hero):
         self.hero = hero
         self.current_local = locations.shmucksburg
-        self.main_loop(self.hero)
+        self.main_loop()
 
-    def main_loop(self, hero):
+    def main_loop(self):
         while self.current_local != None:
             next_location = self.current_local.run(self.hero)
             self.current_local = next_location
-        
-test1 = Test("This is test1.")
-test2 = Test("This is test2.")
-test3 = Test("This is test3.")
+    
 
-
+# Functions for 'main' file
 def title():
     print("\t\t\t****************")
     print("\t\t\tOh Great Knight!")
@@ -74,22 +53,25 @@ def opening_menu():
     if choice == "R":
         print("LOAD")
     elif choice == "N":
+        import items
         data = introduction.intro()
         hero = characters.New_Hero(data[0], data[1])
+        hero.weapon = items.rusty_sword
         game = New_game(hero)
 
     # For testing only!!!!!!!!
     elif choice == "T":
         import items
         hero = characters.New_Hero("Bob", "Hooray!")
-        hero.weapon = items.battle_axe
-        hero.shield = items.sturdy_shield
-        hero.armor = items.leather
+        hero.weapon = items.cheap_dagger
+        hero.shield = items.wood_shield
+        hero.armor = items.handmedowns
         game = New_game(hero)
 
 def main():
     title()
     opening_menu()
 
+# Execute main()
 main()
 input("Thanks for playing!")
