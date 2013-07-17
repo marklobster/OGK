@@ -31,7 +31,10 @@ class Character(object):
     def display_inventory(self):
         print("ITEM\t\tCLASS\tDESCRIPTION")
         for item in self.inventory:
-            print(item.name + "\t" + item.item_class + "\t" + item.description)
+            if item == items.btl:
+                print(self.name + "\t\t" + item.item_class + "\t" + item.description)
+            else:
+                print(item.name + "\t" + item.item_class + "\t" + item.description)
 
 # Battle Functions
     def die(self):
@@ -139,6 +142,7 @@ exit.\n").lower()
         except AttributeError:
             print("Armor: None")
         print("Coins: " + str(self.coins))
+        print("Health: " + str(self.health) + " / " + str(self.health_max))
         print("")
         
 
@@ -174,12 +178,13 @@ R - Run Away""")
                 end_turn = True
 
     def win(self):
-        input("To Victor go the spoils!\n")
+        input(self.catchphrase)
 
 class New_Hero(Hero):
     def __init__(self, name, catchphrase):
         self.name = name
         self.catchphrase = catchphrase
+        self.dead = False
         self.weapon = None
         self.shield = None
         self.armor = None
@@ -189,20 +194,6 @@ class New_Hero(Hero):
         self.coins = 0
 
 
-#goblin = Easy_Monster("Goblin", 35, items.cheap_dagger, items.wood_shield, None, packets.easy)
-#pretty_blob = Easy_Monster("Pretty Blob", 30, items.pseudopod, None, items.leather, packets.easy)
-#sir_rat = Easy_Monster("Sir Rat", 25, items.cheap_dagger, items.wood_shield, items.handmedowns, packets.easy)
-#nasher = Easy_Monster("Nasher", 18, items.fangs, None, None, packets.easy)
-
-#orc = Medium_Monster("Orc", 65, items.blunt_object, items.wood_shield, items.handmedowns, packets.medium)
-#hydra_badger = Medium_Monster("Hydra Badger", 55, items.fangs, None, items.handmedowns, packets.medium)
-#nacht_musik = Nacht_Musik("Nacht Musik", 35, items.talons, None, items.handmedowns, packets.medium)
-#ancient_technology = Medium_Monster("Ancient Technology", 
-
-#orcupine = Hard_Monster("Orcupine", 75, items.spikes, items.green_shield, items.leather, packets.hard)
-#ninja_bear = Hard_Monster("Ninja Bear", 75, items.nunchucks, items.wood_shield, items.handmedowns, packets.hard)
-#mega_troll = Hard_Monster("Mega Troll", 80, items.battle_axe, items.wood_shield, items.leather, packets.hard)
-#ogre_primo = Hard_Monster("Ogre Primo", 85, items.ugly_stick, None, items.handmedowns, packets.hard)
         
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'")

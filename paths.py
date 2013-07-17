@@ -15,21 +15,22 @@ import random, battle_system, monsters
 class Path(object):
     """ Class for all paths, which are location connecting functions. """
     
-    def __init__(self, distance, fight_chance):
+    def __init__(self, distance, fight_chance, hero):
         self.distance = distance
         self.fight_chance = fight_chance
+        self.hero = hero
     
-    def go(self, hero, endpoint):
+    def go(self, endpoint):
         print("Your journey beginneth.  Press 'I' at any time to use items.")
         for segment in range(self.distance):
-            if hero.health:
+            if self.hero.health:
                 # Opportunity to use item
                 entry = input("").upper()
                 while entry == "I":
-                    hero.display_inventory()
-                    item = hero.item_pick()
+                    self.hero.display_inventory()
+                    item = self.hero.item_pick()
                     if item != False:
-                        hero.use_item(item, hero)
+                        self.hero.use_item(item, self.hero)
                     entry = input("").upper()
 
                 # Start message string, get occurence
@@ -49,8 +50,8 @@ class Path(object):
                     monster = self.monster_pick()
                     message += " a monster approaches!"
                     print(message)
-                    battle = battle_system.Battle(hero, monster)
-                    if hero.health:
+                    battle = battle_system.Battle(self.hero, monster)
+                    if self.hero.health:
                         print("Your journey continues.  Press 'I' at any time to use items.")
 
                 # Or if occurence != monster, update message, print message
@@ -59,20 +60,20 @@ class Path(object):
                     print(message)
                     
         # If hero is still alive, return the proper endpoint.
-        if hero.health:
+        if self.hero.health:
             return endpoint
         
         # Otherwise, return None
         else:
             return None
 
-        def run(self, hero, endpoint):
-            """ This is called by the Location when the user enters a path.
+    def run(self, endpoint):
+        """ This is called by the Location when the user enters a path.
 By default, this method calls self.go().  But some locations may over-ride
 the default method in order to run other functions or checks before allowing
 the user to begin the path."""
-            next_location = self.go(hero, endpoint)
-            return next_location
+        next_location = self.go(endpoint)
+        return next_location
 
 class North(Path):
     """ Connects Shmucksburg and Fiddlestick """
@@ -86,28 +87,113 @@ picks a monster and returns it before a battle begins. """
         monster_pool = (monsters.Pretty_Blob(),
                         monsters.Gnasher(),
                         monsters.Nacht_Musik(),
-                        monsters.Sir_Rat())
+                        monsters.Sir_Rat(),
+                        monsters.Goblin())
         return random.choice(monster_pool)
 
 class East(Path):
-    """ Connects Shmucksburg and Cowdump """
+    """ Connects Shmucksburg and Cow-Hip """
     def __init__(self):
         self.distance = 3
         self.fight_chance = 50
 
     def monster_pick(self):
-        monster_pool = (monsters.Goblin(),
-                 monsters.Pretty_Blob(),
+        monster_pool = (monsters.Pretty_Blob(),
                  monsters.Sir_Rat(),
                  monsters.Gnasher(),
                  monsters.Nacht_Musik())
         return random.choice(monster_pool)
 
+class South(Path):
+    """ Connects Shmucksburg to Wrathful Pass """
+    def __init__(self):
+        self.distance = 5
+        self.fight_chance = 65
+
+    def monster_pick(self):
+        monster_pool = (monsters.Ogre_Primo(),
+                        monsters.Mega_Troll(),
+                        monsters.Hydra_Badger(),
+                        monsters.Orcupine())
+        return random.choice(monster_pool)
+
+    def run(self, endpoint):
+        # If hero is coming from Shmucksburg, warn them that this is a
+        # dangerous path.  If hero decides not to take the path, return
+        # locations.shmucksburg.
+        if endpoint == locations.wrathful:
+            print("This is a very dangerous route.  Are you sure you \
+want to travel here? (y/n)")
+            answer = input("").upper()
+            if answer == "N":
+                return locations.shmucksburg
+            elif answer != "Y":
+                print("\a")
+                return locations.shmucksburg
+
+        # Otherwise, run self.go() function
+        next_location = self.go(endpoint)
+        return next_location
 
 
-# Paths
+class West(Path):
+    """ Connects Shmucksburg to Valley of Forbidden Objects """
+    def __init__(self):
+        self.distance = 4
+        self.fight_chance = 70
+
+    def monster_pick(self):
+        monster_pool = (monsters.Ancient_Technology(),
+                        monsters.Orc(),
+                        monsters.Goblin(),
+                        monsters.Hungry_Spider())
+        return random.choice(monster_pool)
+
+class Northwest(Path):
+    """  """
+    def __init__(self):
+        self.distance = 0
+        self.fight_chance = 0
+    
+    def monster_pick(self):
+        monster_pool = (monsters.Goblin(),
+                        monsters.Orc(),
+                        monsters.Hungry_Spider())
+        return random.choice(monster_pool)
+
+class Northeast(Path):
+    """ Connects Fiddlestick to Castle Oldendrab """
+    def __init__(self):
+        self.distance = 0
+        self.fight_chance = 0
+        
+    def monster_pick(self):
+        monster_pool = (monsters.Sir_Rat(),
+                        monsters.Gnasher(),
+                        monsters.Nacht_Musik())
+        return random.choice(monster_pool)
+
+class Mountain_Road(Path):
+    """  """
+    def __init__(self):
+        self.distance = 0
+        self.fight_chance = 0
+        
+    def monster_pick(self):
+        monster_pool = (monsters.Ninja_Bear(),
+                        monsters.Hungry_Spider())
+        return random.choice(monster_pool)
+
+# Initialize paths
 north = North()
 east = East()
+south = South()
+west = West()
+northeast = Northeast()
+northwest = Northwest()
+mountain_road = Mountain_Road()
+
+all_paths = (north, east, south, west, northeast, northwest, mountain_road)
 
 
 if __name__ == "__main__":

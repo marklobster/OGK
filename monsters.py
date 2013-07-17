@@ -5,9 +5,9 @@
 import characters, random, items
 
 # Item packets for monsters
-easy_monsters = (items.band_aid, items.wood_shield)
-medium_monsters = (items.band_aid, items.rusty_sword, items.wood_shield, items.handmedowns)
-hard_monsters = (items.herb, items.battle_axe, items.green_shield, items.leather)
+easy_monsters = (items.bandage, items.wood_shield)
+medium_monsters = (items.bandage, items.rusty_sword, items.wood_shield, items.handmedowns)
+hard_monsters = (items.herbenol, items.green_shield, items.leather, items.wood_shield)
 
 # Parent Classes
 class Monster(characters.Character):
@@ -104,7 +104,7 @@ class Pretty_Blob(Easy_Monster):
 class Sir_Rat(Easy_Monster):
     def __init__(self):
         self.name = "Sir Rat"
-        self.health_max = 30
+        self.health_max = 28
         self.weapon = items.cheap_dagger
         self.shield = items.wood_shield
         self.armor = items.handmedowns
@@ -145,6 +145,15 @@ class Hydra_Badger(Medium_Monster):
         self.armor = items.handmedowns
         super(Hydra_Badger, self).__init__()
 
+    def tactic(self, opponent):
+        """ One-in-four chance of a double-attack. """
+        number = random.randint(1, 4)
+        if number == 4:
+            self.attack(opponent)
+            self.attack(opponent)
+        else:
+            self.attack(opponent)
+
 class Nacht_Musik(Medium_Monster):
     def __init__(self):
         self.name = "Nacht Musik"
@@ -155,7 +164,7 @@ class Nacht_Musik(Medium_Monster):
         super(Nacht_Musik, self).__init__()
         
     def shriek(self, target):
-        number = random.randint(15, 18)
+        number = random.randint(17, 20)
         print(self.name + " shrieks!\n" + str(number) + " damage!")
         target.lose_health(number)
     
@@ -170,11 +179,24 @@ class Nacht_Musik(Medium_Monster):
 class Ancient_Technology(Medium_Monster):
     def __init__(self):
         self.name = "Ancient Technology"
-        self.health_max = 70
+        self.health_max = 60
         self.weapon = items.flashing_ob
         self.shield = None
         self.armor = items.leather
         super(Ancient_Technology, self).__init__()
+
+class Hungry_Spider(Medium_Monster):
+    def __init__(self):
+        self.name = "Hungry Spider"
+        self.health_max = 45
+        self.weapon = items.mandible
+        self.shield = None
+        self.armor = items.leather
+        super(Hungry_Spider, self)
+
+    def win(self):
+        input(self.name + " decides she wasn't hungry after all!")
+
 
 # Hard Monsters
 class Mega_Troll(Hard_Monster):
@@ -185,8 +207,56 @@ class Mega_Troll(Hard_Monster):
         self.shield = items.wood_shield
         self.armor = items.handmedowns
         super(Mega_Troll, self).__init__()
-        if items.battle_axe not in self.inventory:
-            self.inventory.append(items.battle_axe)
+        self.coins -= 15
+        self.inventory.append(items.battle_axe)
+
+class Ogre_Primo(Hard_Monster):
+    def __init__(self):
+        self.name = "Ogre Primo"
+        self.health_max = 90
+        self.weapon = items.ugly_stick
+        self.shield = None
+        self.armor = items.leather
+        super(Ogre_Primo, self).__init__()
+
+    def win(self):
+        input(self.name + " was having so much fun he tries to put you back together.")
+
+    def die(self):
+        self.dead = True
+        print("You hath vanquished Ogre Primo.")
+
+class Orcupine(Hard_Monster):
+    def __init__(self):
+        self.name = "Orcupine"
+        self.health_max = 60
+        self.weapon = items.spikes
+        self.shield = items.green_shield
+        self.armor = items.leather
+        super(Orcupine, self).__init__()
+
+class Ninja_Bear(Hard_Monster):
+    def __init__(self):
+        self.name = "Ninja Bear"
+        self.health_max = 75
+        self.weapon = items.nunchucks
+        self.shield = items.green_shield
+        self.armor = items.handmedowns
+        super(Ninja_Bear, self).__init__()
+
+    def tactic(self, opponent):
+        number = random.randint(1, 4)
+        if number == 4:
+            self.paws(opponent)
+        else:
+            self.attack(opponent)
+
+    def paws(self, opponent):
+        the_hurt = random.randint(37, 42)
+        print(self.name + " attacks with Paws of Fury.")
+        opponent.damage(the_hurt)
+
+
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
