@@ -130,7 +130,7 @@ class Bear_trap(Item):
 
 #Items, non-equippable, non-usable
 # Parameters: name, price, description
-gold_ring = Item("Gold Ring", 180, "The wedding ring you \"lost\".")
+gold_ring = Item("Gold Ring", 100, "The only nice looking article you have.")
 
 
 #Equippable Items

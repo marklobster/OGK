@@ -36,7 +36,12 @@ Now that I have the latter, I can be our village knight!\"\n")
         catchphrase = input("\tWhat shall your battle cry be?\n")
         
     input("\"When I wear this mask, I shall be known as " + name + "!  \
-And when I march into battle, I will shout, '" + catchphrase + "!'\"")
+And when I march into battle, I will shout, '" + catchphrase + "!'\"\n")
+
+    input("After some thought, you decide a hero may need some other things \
+as well, such as weapons and armor and perhaps a shield.  You head to \
+the townsquare to pawn your gold ring and buy some supplies.")
+    
     input("\n\n\t\t\tYOUR JOURNEY BEGINS.\n\n")
 
     intro_data = (name, catchphrase)

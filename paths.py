@@ -117,24 +117,6 @@ class South(Path):
                         monsters.Orcupine())
         return random.choice(monster_pool)
 
-    def run(self, endpoint):
-        # If hero is coming from Shmucksburg, warn them that this is a
-        # dangerous path.  If hero decides not to take the path, return
-        # locations.shmucksburg.
-        if endpoint == locations.wrathful:
-            print("This is a very dangerous route.  Are you sure you \
-want to travel here? (y/n)")
-            answer = input("").upper()
-            if answer == "N":
-                return locations.shmucksburg
-            elif answer != "Y":
-                print("\a")
-                return locations.shmucksburg
-
-        # Otherwise, run self.go() function
-        next_location = self.go(endpoint)
-        return next_location
-
 
 class West(Path):
     """ Connects Shmucksburg to Valley of Forbidden Objects """

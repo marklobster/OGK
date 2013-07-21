@@ -112,11 +112,26 @@ class Character(object):
     
 class Hero(Character):
     """ Your hero character """
-    def __init__(self, name, health_max, weapon, shield, armor):
-        super(Hero, self).__init__(name, health_max, weapon, shield, armor)
+    def __init__(self, personal, inventory, missions):
         self.health_max = 70
-        self.inventory = [items.gold_ring]
-        self.coins = 0
+        self.dead = False
+        self.name = personal[0]
+        self.cathchphrase = personal[1]
+        self.health = personal[2]
+        self.coins = personal[3]
+        self.weapon = personal[4]
+        self.shield = personal[5]
+        self.armor = personal[6]
+        self.inventory = inventory
+        self.missions = missions
+
+    # FOR DEBUGGING PURPOSES:
+    def show_missions(self):
+        counter = 0
+        for i in self.missions:
+            print(str(counter) + str(i))
+            counter += 1
+    # ~~~ !!! ~~~ !!! 
 
     def item_pick(self):
         item = input("Select an item to use or equip or press 'enter' to \
@@ -125,6 +140,10 @@ exit.\n").lower()
         return item
 
     def display_inventory(self):
+        # FOR DEBUGGING PURPOSES:
+        self.show_missions()
+        # ~~~ !!! ~~~ !!!
+        
         print("\nITEM\t\tCLASS\tDESCRIPTION")
         for item in self.inventory:
             print(item.name + "\t" + item.item_class + "\t" + item.description)
@@ -182,6 +201,7 @@ R - Run Away""")
 
 class New_Hero(Hero):
     def __init__(self, name, catchphrase):
+        # Assign name and catchphrase to hero.  Then assign default settings.
         self.name = name
         self.catchphrase = catchphrase
         self.dead = False
@@ -193,6 +213,10 @@ class New_Hero(Hero):
         self.inventory = [items.gold_ring]
         self.coins = 0
 
+        # Create list of missions where all are set to False
+        self.missions = []
+        for i in range(0, 9):
+            self.missions.append(False)
 
         
 if __name__ == "__main__":
