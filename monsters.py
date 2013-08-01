@@ -43,6 +43,14 @@ class Monster(characters.Character):
         print("\t" + str(self.coins) + " coins")
         opponent.coins += self.coins
 
+    def run_away(self):
+        number = random.randint(1, 6)
+        if number == 1:
+            self.deactivate()
+        else:
+            print("You fail to escape")
+        
+
 class Easy_Monster(Monster):
     # Inherits tactic() from grandparent class characters.Character
     def __init__(self):
@@ -57,10 +65,10 @@ class Medium_Monster(Monster):
         super(Medium_Monster, self).__init__()
 
     def tactic(self, opponent):
-        if self.health < (self.health_max * 0.18) and items.band_aid in self.inventory:
-            number = random.randint(1, 3)
+        if self.health < (self.health_max * 0.18) and items.bandage in self.inventory:
+            number = random.randint(1, 4)
             if number == 1:
-                self.use_item(items.band_aid, self)
+                self.use_item(items.bandage, self)
             else: self.attack(opponent)
         else:
             self.attack(opponent)
@@ -72,11 +80,18 @@ class Hard_Monster(Monster):
         super(Hard_Monster, self).__init__()
 
     def tactic(self, opponent):
-        if self.health < (self.health_max * 0.18) and items.first_aid in self.inventory:
-            self.use_item(items.first_aid, self)
+        if self.health < (self.health_max * 0.18) and items.herbenol in self.inventory:
+            number = random.randint(1, 3)
+            if number == 1:
+                self.use_item(items.bandage, self)
+            else: self.attack(opponent)
         else:
             self.attack(opponent)
 
+class Boss(Monster):
+    def run_away(self):
+        print("You can't run from " + self.name + "!")
+        
         
 # Easy Monsters
 class Goblin(Easy_Monster):
@@ -192,7 +207,7 @@ class Hungry_Spider(Medium_Monster):
         self.weapon = items.mandible
         self.shield = None
         self.armor = items.leather
-        super(Hungry_Spider, self)
+        super(Hungry_Spider, self).__init__()
 
     def win(self):
         input(self.name + " decides she wasn't hungry after all!")
@@ -256,7 +271,55 @@ class Ninja_Bear(Hard_Monster):
         print(self.name + " attacks with Paws of Fury.")
         opponent.damage(the_hurt)
 
+# Bosses
 
+class Simon_Slick(Boss):
+    def __init__(self):
+        self.name = "Simon the Slick"
+        self.health_max = 70
+        self.health = 70
+        self.dead = False
+        self.weapon = items.battle_axe
+        self.shield = items.wood_shield
+        self.armor = items.handmedowns
+        self.inventory = [items.battle_axe, items.wood_shield,
+                          items.handmedowns, items.bandage,
+                          items.herbenol]
+
+    def tactic(self, opponent):
+        if self.health < (self.health_max * 0.18) and items.bandage in self.inventory:
+            number = random.randint(1, 4)
+            if number == 1:
+                self.use_item(items.bandage, self)
+            else:
+                self.attack(opponent)
+        else:
+            self.attack(opponent)
+
+    def die(self):
+        self.dead = True
+        print("You have captured Simon the Slick, a wanted man!")
+
+class Guillek(Boss):
+    def __init__(self):
+        self.name = "Guillek the Mighty"
+        self.health_max = 80
+        self.health = 80
+        self.dead = False
+        self.weapon = items.rusty_sword
+        self.shield = items.sturdy_shield
+        self.armor = items.handmedowns
+        self.inventory = [items.rusty_sword, items.rusty_sword,
+                          items.wood_shield, items.wood_shield,
+                          items.handmedowns, items.first_aid]
+
+    def tactic(self, opponent):
+        self.attack(opponent)
+        self.attack(opponent)
+
+    def die(self):
+        self.dead = True
+        print("Guilleck the Mighty falls to the ground.")
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")

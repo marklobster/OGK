@@ -1,197 +1,17 @@
 # Locations to be imported to 'Oh Great Knight'
+# Mark Lauber
+# June 2013
 
-import paths, items, converter, messages
-
-class Location(object):
-    """ Super class for village objects. """
-
-    # Main Functions
-    def run(self):
-        """ Run appropriate updates for the location.  Then run the menu. """
-        self.update()
-        next_location = self.menu()
-        return next_location
-
-    def update(self):
-        """ Update location attributes based on hero's data. """
-        # By default, this method does nothing.
-        pass
-
-    def menu(self):
-        """ Run the menu and return the next_location """
-        response = ""
-        while response != "Q" and response != "J":
-            print("\nYOU ARE IN " + self.name.upper() + ".")
-            print("""
-J - JOURNEY
-T - TALK TO VILLAGERS
-S - SHOP
-I - INVENTORY
-R - REST
-G - GAME SAVE
-Q - QUIT""")
-            response = input("").upper()
-            if response == "J":
-                # Ask for next location via get_destination() method
-                destination = self.get_destination()
-
-                # If a destination was selected, call the journey function.
-                # If the hero survives the journey, the desired endpoint will
-                # be returned and fed back into the next_location of game.main_loop.
-                # But an unsuccessful journey returns None, which is fed back to
-                # the main_loop, and ends the game.main_loop.
-                if destination:
-                    next_location = self.journey(destination[0], destination[1])
-                # Otherwise, just return to the location's main menu by
-                # changing response from 'J' to the empty string.
-                else:
-                    response = ""
-            elif response == "T":
-                self.talk()
-            elif response == "S":
-                self.shop_menu()
-            elif response == "I":
-                self.inv_function()
-            elif response == "R":
-                print("Inn")
-            elif response == "G":
-                print("save")
-            elif response == "Q":
-                next_location = None
-            else:
-                print("\a")
-
-        # next_location is returned to the game.main_loop
-        return next_location
-
-    # Menu functions
-    def get_destination(self):
-        """ This function is unique to each Location.  This function gives a
-menu of destinations.  The user selects one.  Then the journey() function is
-run with the appropriate path and endpoint."""
-        pass
-        
-    def journey(self, path, endpoint):
-        """ Run the selected path.  Return the appropriate new location. """
-        next_location = path.run(endpoint)
-        return next_location
-
-    def talk(self):
-        """ Read what the villagers have to say """
-        for message in self.messages:
-            print("\"" + message + "\"\n")
-
-    def inv_function(self):
-        """ Allows hero to use item on himself while at a location's menu. """
-        self.hero.display_inventory()
-        item = self.hero.item_pick()
-        if item != False:
-            if item.personal_use == True:
-                self.hero.use_item(item, self.hero)
-            else:
-                input("You cannot use this here.")
-
-# Shop functions
-    def shop_menu(self):
-        print("\n\t\t\tYou have entered Ye Olde Item Shoppe.\n")
-        print("\"Greetings, stranger!\"")
-        option = ""
-        while option != "X":
-            print("""
-P - Purchase Item
-S - Sell Item
-I - View Inventory
-X - Exit
-""")
-            print("Silver: " + str(self.hero.coins))
-            option = input("What can I do for ye?\n").upper()
-            if option == "X":
-                input("\"Good day to you sir!\"\n")
-            elif option == "P":
-                self.hero_purchase()
-            elif option == "S":
-                self.hero_sell()
-            elif option == "I":
-                self.hero.display_inventory()
-            else:
-                print("\a\"What jibberish thou art speaketh?!\"")
-
-    def show_inventory(self):
-        print("ITEM\t\tPRICE\tCLASS\tDESCRIPTION")
-        for item in self.inventory:
-            print(item.name + "\t\t" + str(item.price) + "\t" + item.item_class + "\t" + item.description)
-            
-    def hero_purchase(self):
-        self.show_inventory()
-        print("\"Which would ye like to purchase?\"")
-        item = input("")
-        item = converter.convert(item)
-
-        # Check if item is a real item.
-        if item != False:
-            
-            # If item is in stock and hero can afford it:
-            if item in self.inventory and item.price <= self.hero.coins:
-                self.hero.inventory.append(item)
-                self.hero.coins -= item.price
-                print("\"Nice doing business with you, sir!\"")
-
-            # If item is in stock and hero cannot afford it:
-            elif item in self.inventory and item.price > self.hero.coins:
-                print("\a\"You can't afford that!\"")
-
-            # If item is not in stock:
-            else:
-                print("\a\"Sorry I haven't got that in stock.\"")
-
-    def hero_sell(self):
-        # Show inventory, input item to sell
-        self.hero.display_inventory()
-        item = input("\"What would ye like to sell?\" ").lower()
-
-        # If item does not exist, converter will print appropriate message
-        # and neither if nor elif part of branch are executed.
-        item = converter.convert(item)
-
-        # If hero has the item, calculate sale price
-        if item in self.hero.inventory:
-            sale_price = int(item.price * 0.8)
-            print("\"I'll offer you " + str(sale_price) + " silver.\"")
-            response = input("Is that agreeable to you?\" (y/n) ").upper()
-
-            # If sale price is acceptable, commence sale
-            if response == "Y":
-                self.hero.inventory.remove(item)
-
-                # If item is equipped, unequip it
-                if item == self.hero.weapon:
-                    self.hero.weapon = None
-                elif item == self.hero.shield:
-                    self.hero.shield = None
-                elif item == self.hero.armor:
-                    self.hero.armor = None
-                    
-                self.hero.coins += sale_price
-                print("\"Nice doing business with you, sir!\"")
-
-            # If sale price is not acceptable end function
-            elif response == "N":
-                print("\"Tis the best I can do!\"")
-
-            # If response is invalid, end function
-            else:
-                print("\a\"What?\"")
-
-        # If item does exist but is not in inventory, end function
-        elif item != False:
-            print("\"You don't have one!\a\"")
+import location_parent, paths, items, messages
 
 
-class Shmucksburg(Location):
+class Shmucksburg(location_parent.Location):
     def __init__(self):
         self.name = "Shmucksburg"
         self.inventory = [items.cheap_dagger, items.handmedowns, items.bandage, items.wood_shield]
         self.messages = messages.shmucksburg[0:4]
+        self.donations = [items.cheap_dagger, items.cheap_dagger, items.handmedowns]
+        self.sort_donations()
 
     def get_destination(self):
         response = input("""
@@ -235,10 +55,10 @@ you want to proceed? (y/n) ").lower()
         """ Missions 0 and 1:  Helping a travelor. """
         print("\"Hi, stranger.  Going to Cow-Hip?  Do you mind if I \
 come along?  I could certainly use the protection since I'll be \
-transporting these goods.")
+transporting these goods.\"")
         answer = ""
         while answer != "y" and answer != "n":
-            answer = input("\nWhat do ya say?\" (y/n) ").lower()
+            answer = input("\nWhat do you say? (y/n) ").lower()
             if answer == "y":
                 self.hero.missions[1] = True
                 input("\"Many thanks!  I will repay you when we arrive.\"")
@@ -248,7 +68,7 @@ transporting these goods.")
     
     def menu(self):
         response = ""
-        while response != "Q" and response != "J":
+        while response != "Q":
             print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 J - JOURNEY
@@ -265,8 +85,7 @@ Q - QUIT
                 destination = self.get_destination()
                 if destination:
                     next_location = self.journey(destination[0], destination[1])
-                else:
-                    response = ""
+                    return next_location
             elif response == "T":
                 self.talk()
             elif response == "S":
@@ -274,7 +93,7 @@ Q - QUIT
             elif response == "I":
                 self.inv_function()
             elif response == "D":
-                print("donate")
+                self.donation_menu()
             elif response == "R":
                 print("Inn")
             elif response == "G":
@@ -287,10 +106,67 @@ Q - QUIT
 
     def update(self):
         if self.hero.missions[0] == True:
-            self.messages = self.messages[1:2] + messages.shmucksburg[4:5]
-            
+            self.messages = messages.shmucksburg[1:2] + messages.shmucksburg[4:5]
+
+    def donation_menu(self):
+        response = ""
+        print("\t\t\tYou have entered the Armory.\n")
+        print("\"Welcome, patron!\"")
+        while response != "X":
+            print("""
+ARMORY
+V - View Contents
+D - Donate
+X - Exit
+""")
+            response = input("\"Are we feeling philanthropic today?\" ").upper()
+            if response == "V":
+                print("ITEM\t\tCLASS")
+                for item in self.donations:
+                    print(item.name + "\t" + item.item_class)
+            elif response == "D":
+                self.donate()
+            elif response == "X":
+                input("\"Have a grand day!\"\n")
+            else:
+                print("\"Could you repeat that?\"\a")
+
+    def donate(self):
+        """ For hero donating items to the armory. """
+
+        # Get item
+        import converter
+        self.hero.inventory_menu()
+        item = input("Select a weapon, shield or armor to donate.  Or \
+press enter to exit. ").lower()
+        item = converter.convert(item)
+
+        # If item is a weapon, shield or armor, accept the donation
+        if isinstance(item, items.Weapon) or isinstance(item, items.Shield) or isinstance(item, items.Armor):
+            if item in self.hero.inventory:
+                self.donations.append(item)
+                self.hero.drop(item)
+                self.sort_donations()
+                input("\"Thank you for your donation.\"")
+            else:
+                input("You don't have one!")
+
+        # If item is a real item but is not in the above classes, do not accept.
+        elif item != False:
+            input("That type of item is not needed.")
+
+    def sort_donations(self):
+        """ Sort armory by each item's item_class attribute """
+        intermed_list = []
+        for item in self.donations:
+            intermed_list.append((item.item_class, item))
+        intermed_list.sort()
+        self.donations = []
+        for item in intermed_list:
+            self.donations.append(item[1])
+
     
-class Fiddlestick(Location):
+class Fiddlestick(location_parent.Location):
     def __init__(self):
         self.name = "Fiddlestick"
         self.inventory = [items.rusty_sword, items.wood_shield, items.bandage, items.handmedowns]
@@ -304,8 +180,8 @@ NE) Oldendrab Castle
 S) Shmucksburg
 \nEnter the direction or location.  Or press enter to exit.
 """).lower()
-        if response == "nw" or response == "gadgetsburg":
-            destination = (paths.northwest, gadgetsburg)
+        if response == "nw" or response == "silverrock":
+            destination = (paths.northwest, silverrock)
         elif response == "ne" or response == "oldendrab castle":
             destination = (paths.northeast, oldendrab)
         elif response == "s" or response == "shmucksburg":
@@ -318,7 +194,7 @@ S) Shmucksburg
         return destination
 
 
-class Cowhip(Location):
+class Cowhip(location_parent.Location):
     def __init__(self):
         self.name = "Cow-Hip"
         self.inventory = [items.cheap_dagger, items.wood_shield, items.bandage]
@@ -347,16 +223,21 @@ W) Shmucksburg
         if self.hero.missions[2] == False:
             self.hero.missions[2] = True
             if self.hero.missions[1] == True:
-                reward = 15
-                input("\"Thank you for your protection!  Here is your reward.\"")
+                reward = 18
+                input("\n\"Thank you for your protection!  Here is your reward.\"")
                 print("You gain: ")
                 input("\t" + str(reward) + " coins")
                 self.hero.coins += reward
-                self.inventory.append(items.leather)
+                if items.leather not in self.inventory:
+                    self.inventory.append(items.leather)
 
-class Valley_End(Location):
+
+class Valley_End(location_parent.Location):
     def __init__(self):
         self.name = "Valley's End"
+        self.inventory = [items.green_shield, items.wood_shield,
+                          items.rusty_sword, items.cheap_dagger,
+                          items.rare_coin]
 
     def get_destination(self):
         response = input("""
@@ -372,7 +253,79 @@ E) Shmucksburg
             destination = None
         return destination
 
-class Wrathful(Location):
+    def menu(self):
+        """ Run the menu and return the next_location """
+        response = ""
+        while response != "Q":
+            print("\nYOU ARE IN " + self.name.upper() + ".")
+            print("""
+D - DIG
+J - JOURNEY
+I - INVENTORY
+R - REST
+G - GAME SAVE
+Q - QUIT""")
+            response = input("").upper()
+            if response == "J":
+                destination = self.get_destination()
+                if destination:
+                    next_location = self.journey(destination[0], destination[1])
+                    return next_location
+            elif response == "D":
+                if self.hero.missions[3] == True and self.hero.missions[4] == False:
+                    self.boss1()
+                else:
+                    self.dig()
+                # If hero dies in battle, return None
+                if self.hero.health == 0:
+                    return None
+            elif response == "I":
+                self.inv_function()
+            elif response == "R":
+                print("Inn")
+            elif response == "G":
+                print("save")
+            elif response == "Q":
+                next_location = None
+            else:
+                print("\a")
+
+        return next_location
+
+    def dig(self):
+        import random
+        number = random.randint(1, 5)
+        if number == 1 or number == 2:
+            print("You find nothing.")
+        elif number == 3 or number == 4:
+            print("A monster approaches!")
+            import monsters, battle_system
+            monster_pool = (monsters.Ancient_Technology(),
+                                    monsters.Orc(),
+                                    monsters.Goblin(),
+                                    monsters.Hungry_Spider())
+            monster = random.choice(monster_pool)
+            battle = battle_system.Battle(self.hero, monster)
+        elif number == 5:
+            item = random.choice(self.inventory)
+            print("You find:\n\t" + item.name)
+            self.hero.inventory.append(item)
+        # self.hero.time += 1
+
+    def boss1(self):
+        print("You dig where the map directs you to dig.")
+        input("And you find:\n\t" + items.kings_loot.name)
+        self.hero.inventory.append(items.kings_loot)
+        self.hero.inventory.remove(items.t_map)
+        input("\nYou turn around to find that a stranger has snuck up on you!")
+        input("Prepare for battle!\n")
+        import battle_system, monsters
+        boss = monsters.Simon_Slick()
+        battle = battle_system.Battle(self.hero, boss)
+        if self.hero.health:
+            self.hero.missions[4] = True
+
+class Wrathful(location_parent.Location):
     def __init__(self):
         self.name = "Wrathful Pass"
 
@@ -381,7 +334,7 @@ class Wrathful(Location):
 Where shall you journey?
 N) Shmucksburg
 """).lower()
-        if response == "e" or response == "shmucksburg":
+        if response == "n" or response == "shmucksburg":
             destination = (paths.south, shmucksburg)
         elif response == "":
             destination = None
@@ -391,6 +344,95 @@ N) Shmucksburg
         return destination
 
 
+class Silverrock(location_parent.Location):
+    def __init__(self):
+        self.name = "Silverrock"
+
+
+class Oldendrab(location_parent.Location):
+    def __init__(self):
+        self.name = "Castle Oldendrab"
+
+    def get_destination(self):
+        response = input("""
+Where shall you journey?
+SW) Fiddlestick
+""").lower()
+        if response == "sw" or response == "fiddlestick":
+            destination = (paths.northeast, fiddlestick)
+        elif response == "":
+            destination = None
+        else:
+            print("\a")
+            destination = None
+        return destination
+
+    def menu(self):
+        """ Run the menu and return the next_location """
+        response = ""
+        while response != "Q" and response != "J":
+            print("\nYOU ARE IN " + self.name.upper() + ".")
+            print("""
+J - JOURNEY
+T - TALK TO KING
+I - INVENTORY
+R - REST
+G - GAME SAVE
+Q - QUIT""")
+            response = input("").upper()
+            if response == "J":
+                destination = self.get_destination()
+                if destination:
+                    next_location = self.journey(destination[0], destination[1])
+                    return next_location
+            elif response == "T":
+                self.meeting1()
+            elif response == "I":
+                self.inv_function()
+            elif response == "R":
+                print("\"You can't rest here.  This is the King's Court!\"")
+            elif response == "G":
+                print("save")
+            elif response == "Q":
+                next_location = None
+            else:
+                print("\a")
+
+        return next_location
+
+    def meeting1(self):
+        """ King gives you Treasure Map """
+        # Mission 3: Get a treasure map.
+        input("You introduce yourself as an ambassador in order to \
+gain audience with the King.")
+        print("King: Good morrow, young man.  What is it you seek?")
+        input(self.hero.name + ": Good King Vinny, I come on behalf of \
+ Shmucksburg.  We are robbed incessantly.  And since our armory was \
+ ransacked last year, we are utterly unable to defend ourselves.  I \
+ request guards or perhaps armaments with which to defend our poor village.")
+        input("King: My good man, this entire kingdom is poor!  At \
+least it will be if we cannot regain Silverrock....  As of now, \
+nearly all of my guards are preparing to march west to rid Silverrock of its\
+ orcish pests.  How, then, could I supply your village with guards\
+ or armaments?  I am sorry good sir, but I must send you away empty-\
+ handed.")
+        input(self.hero.name + ": I will fight with your men if you promise to help me.")
+        input("King: Are you offering me an ultimatem?!  If you are indeed \
+a warrior, then I order you to fight for me!  In fact, I have a specific \
+task for you:")
+        input("Go to the Valley of Forbidden Objects.  There is treasure \
+there with which we could bribe the orcs.  I'm afraid \
+they have grown dangerously armed and organized.  I would rather give \
+them buried treasure than waste my men on them.  Here is a map.  Dig \
+up the chest at the end of the valley.  Give it to the orcs as payment.\
+  Since you fancy yourself an ambassador, I'll leave convincing them to \
+take it up to you.")
+        input("I am sending trusted servants with you.  They will watch \
+and make sure you do not steal the treasure.  If you accomplish \
+what I ask, I will see what I can do for Shmucksburg.  Now make haste.")
+        self.hero.inventory.append(items.t_map)
+        self.hero.missions[3] = True
+        input("You get:\n\tTreasure Map")
 
 # Initialize locations
 shmucksburg = Shmucksburg()
@@ -398,8 +440,9 @@ fiddlestick = Fiddlestick()
 cowhip = Cowhip()
 valley = Valley_End()
 wrathful = Wrathful()
+oldendrab = Oldendrab()
 
-all_locations = (shmucksburg, fiddlestick, cowhip, valley, wrathful)
+all_locations = (shmucksburg, fiddlestick, cowhip, valley, wrathful, oldendrab)
 
 
 if __name__ == "__main__":

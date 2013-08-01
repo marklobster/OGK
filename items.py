@@ -87,6 +87,16 @@ class First_aid(Item):
         target.gain_health(70)
         target.inventory.remove(self)
 
+class Treasure_map(Item):
+    def __init__(self):
+        self.name = "Treasure Map"
+        self.price = 100
+        self.description = "A map of the Valley of Forbidden Objects."
+        self.item_class = "N/A"
+
+    def use(self, target):
+        input("The map shows where to dig at the valley's end.")
+
 class Beartraplauncher(Item):
     def __init__(self):
         self.name = "B.T.L."
@@ -131,7 +141,8 @@ class Bear_trap(Item):
 #Items, non-equippable, non-usable
 # Parameters: name, price, description
 gold_ring = Item("Gold Ring", 100, "The only nice looking article you have.")
-
+kings_loot = Item("King's Loot", 500, "The King's buried stash")
+rare_coin = Item("Rare Coin", 60, "Currency from an ancient civilization")
 
 #Equippable Items
 # Weapons
@@ -161,7 +172,7 @@ sturdy_shield = Shield("Sturdy Shield", 120, "A sturdy iron shield", 70, "S-3")
 # Armor
 # Parameters: name, price, description, thickness, item_class
 handmedowns = Armor("Hand-me-downs", 30, "Hand-me-down armor", 20, "A-1")
-leather = Armor("Leather Armor", 65, "Sleek leather with a helmet that totally doesn't match", 40, "A-2")
+leather = Armor("Leather Armor", 65, "A handsome outfit for a handsome warrior", 40, "A-2")
 sweet_armor = Armor("Sweet Get-up", 100, "Chain-mail armor with a life-time warranty", 60, "A-3")
 
 
@@ -170,6 +181,7 @@ sweet_armor = Armor("Sweet Get-up", 100, "Chain-mail armor with a life-time warr
 bandage = Bandage()
 herbenol = Herbenol()
 first_aid = First_aid()
+t_map = Treasure_map()
 
 # Special Items For Attacking
 btl = Beartraplauncher()

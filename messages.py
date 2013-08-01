@@ -7,7 +7,7 @@ shmucksburg = ("Aye!  The brigands robbed me again!  What this village needs is 
                "Someone should go to King Vinny up at Oldendrab Castle to request donations for our armory."
                )
 
-cow_hip = ("Welcom to Cow-Hip!  Sure, we seem to be the butt of every joke.  But in my opinion we have the best fresh dairy air!",
+cow_hip = ("Welcome to Cow-Hip!  Sure, we seem to be the butt of every joke.  But in my opinion we have the best fresh dairy air!",
            "It sure is great to have commerce back in Cow-Hip.  In fact, I heard there's a new item at the shop."
            )
 

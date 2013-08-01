@@ -23,7 +23,7 @@ import characters, locations, paths, introduction
 
 
 class New_game(object):
-    def __init__(self, hero):
+    def __init__(self, hero, location):
         self.hero = hero
         
         # Feed hero into each location as an attribute
@@ -35,7 +35,7 @@ class New_game(object):
             i.hero = self.hero
 
         # Set current_local and begin main_loop()
-        self.current_local = locations.shmucksburg
+        self.current_local = location
         self.main_loop()
 
     def main_loop(self):
@@ -67,17 +67,26 @@ def opening_menu():
             import items
             data = introduction.intro()
             hero = characters.New_Hero(data[0], data[1])
-            game = New_game(hero)
+            game = New_game(hero, locations.shmucksburg)
 
         # For testing only!!!!!!!!
         elif choice == "T":
             import items
             hero = characters.New_Hero("Bob", "Hooray!")
-            hero.weapon = items.cheap_dagger
+            hero.missions = [True, True, True, True, False, False]
+            hero.weapon = items.rusty_sword
             hero.shield = items.wood_shield
-            hero.armor = items.handmedowns
+            hero.armor = items.leather
             hero.coins = 100
-            game = New_game(hero)
+            hero.inventory = [items.bandage,
+                              items.rusty_sword,
+                              items.wood_shield,
+                              items.leather,
+                              items.t_map
+                              ]
+            for i in range(1, 7):
+                hero.inventory.append(items.bandage)
+            game = New_game(hero, locations.shmucksburg)
 
 def main():
     title()

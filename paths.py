@@ -5,11 +5,6 @@
 
 import random, battle_system, monsters
 
-# Monster tuples, specific to each path
-#south_monsters = (monsters.Hydra_Badger(), monsters.Orc(), monsters.Mega_Troll(), monsters.Ogre_Primo())
-#west_monsters = (monsters.Orc(), monsters.Ancient_Technology())
-#northeast_monsters = (monsters.Goblin(), monsters.Gnasher())
-#northwest_monsters = (monsters.Sir_Rat())
 
 # Path parent class, followed by sub-classes for each village
 class Path(object):
@@ -27,10 +22,12 @@ class Path(object):
                 # Opportunity to use item
                 entry = input("").upper()
                 while entry == "I":
-                    self.hero.display_inventory()
+                    self.hero.inventory_menu()
                     item = self.hero.item_pick()
                     if item != False:
                         self.hero.use_item(item, self.hero)
+                    if entry == "I":
+                        print("\nPress 'I' to use another item.")
                     entry = input("").upper()
 
                 # Start message string, get occurence
@@ -134,8 +131,8 @@ class West(Path):
 class Northwest(Path):
     """  """
     def __init__(self):
-        self.distance = 0
-        self.fight_chance = 0
+        self.distance = 2
+        self.fight_chance = 70
     
     def monster_pick(self):
         monster_pool = (monsters.Goblin(),
@@ -146,8 +143,8 @@ class Northwest(Path):
 class Northeast(Path):
     """ Connects Fiddlestick to Castle Oldendrab """
     def __init__(self):
-        self.distance = 0
-        self.fight_chance = 0
+        self.distance = 1
+        self.fight_chance = 45
         
     def monster_pick(self):
         monster_pool = (monsters.Sir_Rat(),
@@ -158,8 +155,8 @@ class Northeast(Path):
 class Mountain_Road(Path):
     """  """
     def __init__(self):
-        self.distance = 0
-        self.fight_chance = 0
+        self.distance = 3
+        self.fight_chance = 45
         
     def monster_pick(self):
         monster_pool = (monsters.Ninja_Bear(),
