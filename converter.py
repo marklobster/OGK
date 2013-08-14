@@ -24,7 +24,10 @@ converter = {"": False,
              "sweet get up": items.sweet_armor,
              "b.t.l.": items.btl,
              "btl": items.btl,
-             "bear trap": items.bear_trap}
+             "bear trap": items.bear_trap,
+             "treasure map": items.t_map,
+             "king's loot": items.kings_loot,
+             "rare coin": items.rare_coin}
 
 def convert(term):
     """converts item abbreviation to item variable using convertor dictionary"""

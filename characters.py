@@ -31,7 +31,10 @@ class Character(object):
     def display_inventory(self):
         print("ITEM\t\tCLASS\tDESCRIPTION")
         for item in self.inventory:
-            print(item.name + "\t" + item.item_class + "\t" + item.description)
+            if len(item.name) < 8:
+                print(item.name + "\t\t" + item.item_class + "\t" + item.description)
+            else:
+                print(item.name + "\t" + item.item_class + "\t" + item.description)
 
 # Battle Functions
     def die(self):
@@ -119,6 +122,7 @@ class Hero(Character):
         self.weapon = personal[4]
         self.shield = personal[5]
         self.armor = personal[6]
+        self.time = personal[7]
         self.inventory = inventory
         self.missions = missions
 
@@ -223,6 +227,7 @@ class New_Hero(Hero):
         self.health = 70
         self.inventory = [items.gold_ring]
         self.coins = 0
+        self.time = 0
 
         # Create list of missions where all are set to False
         self.missions = []

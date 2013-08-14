@@ -68,7 +68,7 @@ transporting these goods.\"")
     
     def menu(self):
         response = ""
-        while response != "Q":
+        while self.hero.health:
             print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 J - JOURNEY
@@ -95,18 +95,25 @@ Q - QUIT
             elif response == "D":
                 self.donation_menu()
             elif response == "R":
-                print("Inn")
+                self.rest()
             elif response == "G":
                 print("save")
             elif response == "Q":
-                next_location = None
+                return None
             else:
                 print("\a")
-        return next_location
+        return None
 
     def update(self):
-        if self.hero.missions[0] == True:
+        if self.hero.missions[0] == True and self.hero.missions[3] == False:
             self.messages = messages.shmucksburg[1:2] + messages.shmucksburg[4:5]
+        elif self.hero.missions[3] == True:
+            self.messages = messages.shmucksburg[5:9]
+
+    def rest(self):
+        print("You go home to rest.")
+        self.hero.gain_health(70)
+        input(self.hero.name + " gains 70 HP.")
 
     def donation_menu(self):
         response = ""
@@ -172,10 +179,14 @@ class Fiddlestick(location_parent.Location):
         self.inventory = [items.rusty_sword, items.wood_shield, items.bandage, items.handmedowns]
         self.messages = messages.fiddlestick[0:3]
 
+    def update(self):
+        if self.hero.missions[5] == True:
+            self.messages = messages.fiddlestick[3:5]
+
     def get_destination(self):
         response = input("""
 Where shall you journey?
-NW) Gadgetsburg
+NW) Silverrock
 NE) Oldendrab Castle
 S) Shmucksburg
 \nEnter the direction or location.  Or press enter to exit.
@@ -206,7 +217,7 @@ Where shall you journey?
 W) Shmucksburg
 \nEnter the direction or location.  Or press enter to exit.
 """).lower()
-        if response == "w" or response == "shmuckburg":
+        if response == "w" or response == "shmucksburg":
             destination = (paths.east, shmucksburg)
         elif response == "":
             destination = None
@@ -256,7 +267,7 @@ E) Shmucksburg
     def menu(self):
         """ Run the menu and return the next_location """
         response = ""
-        while response != "Q":
+        while self.hero.health:
             print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 D - DIG
@@ -276,9 +287,6 @@ Q - QUIT""")
                     self.boss1()
                 else:
                     self.dig()
-                # If hero dies in battle, return None
-                if self.hero.health == 0:
-                    return None
             elif response == "I":
                 self.inv_function()
             elif response == "R":
@@ -286,11 +294,11 @@ Q - QUIT""")
             elif response == "G":
                 print("save")
             elif response == "Q":
-                next_location = None
+                return None
             else:
                 print("\a")
-
-        return next_location
+        
+        return None
 
     def dig(self):
         import random
@@ -301,7 +309,6 @@ Q - QUIT""")
             print("A monster approaches!")
             import monsters, battle_system
             monster_pool = (monsters.Ancient_Technology(),
-                                    monsters.Orc(),
                                     monsters.Goblin(),
                                     monsters.Hungry_Spider())
             monster = random.choice(monster_pool)
@@ -312,11 +319,22 @@ Q - QUIT""")
             self.hero.inventory.append(item)
         # self.hero.time += 1
 
+    def arrival1(self):
+        input("King's Servant: " + self.hero.name + ", the journey has \
+been dangerous thus far.  Please take this.  You may need it.")
+        input("You get:\n\tHerbenol")
+        self.hero.inventory.append(items.herbenol)
+
     def boss1(self):
         print("You dig where the map directs you to dig.")
         input("And you find:\n\t" + items.kings_loot.name)
         self.hero.inventory.append(items.kings_loot)
         self.hero.inventory.remove(items.t_map)
+        input("King's First Servant: I see that much of this treasure was made by \
+orcs.  Perhaps Good King Vinny is trying to make amends by returning goods \
+taken during one of the old wars.")
+        input("King's Second Servant: I don't believe the orcs would even \
+realize....  What ho!  Who goes there!?\n")
         input("\nYou turn around to find that a stranger has snuck up on you!")
         input("Prepare for battle!\n")
         import battle_system, monsters
@@ -324,6 +342,10 @@ Q - QUIT""")
         battle = battle_system.Battle(self.hero, boss)
         if self.hero.health:
             self.hero.missions[4] = True
+
+    def update(self):
+        if self.hero.missions[3] == True and self.hero.missions[4] == False:
+            self.arrival1()
 
 class Wrathful(location_parent.Location):
     def __init__(self):
@@ -347,7 +369,53 @@ N) Shmucksburg
 class Silverrock(location_parent.Location):
     def __init__(self):
         self.name = "Silverrock"
+        self.messages = messages.silverrock
 
+    def update(self):
+        if self.hero.missions[4] == False and self.hero.missions[5] == False:
+            self.shortcut()
+        elif self.hero.missions[5] == False:
+            self.boss2()
+        if items.t_map in self.hero.inventory:
+            self.hero.inventory.remove(items.t_map)
+        if items.kings_loot in self.hero.inventory:
+            self.hero.inventory.remove(items.kings_loot)
+
+    def get_destination(self):
+        response = input("""
+Where shall you journey?
+SE) Fiddlestick
+""").lower()
+        if response == "se" or response == "fiddlestick":
+            destination = (paths.northwest, fiddlestick)
+        elif response == "":
+            destination = None
+        else:
+            print("\a")
+            destination = None
+        return destination
+
+    def boss2(self):
+        for i in range(0, 8):
+            input(messages.boss2[i] + "\n")
+        import battle_system, monsters
+        boss = monsters.Guillek()
+        battle_system.Battle(self.hero, boss)
+        if self.hero.health:
+            for i in range(8, 10):
+                input(messages.boss2[i] + "\n")
+            self.hero.missions[5] = True
+
+    def shortcut(self):
+        for i in range(0, 2):
+            input(messages.shortcut[i] + "\n")
+        import battle_system, monsters
+        boss = monsters.Guillek()
+        battle_system.Battle(self.hero, boss)
+        if self.hero.health:
+            input(messages.shortcut[2] + "\n")
+            self.hero.missions[5] = True
+    
 
 class Oldendrab(location_parent.Location):
     def __init__(self):
@@ -370,7 +438,7 @@ SW) Fiddlestick
     def menu(self):
         """ Run the menu and return the next_location """
         response = ""
-        while response != "Q" and response != "J":
+        while self.hero.health:
             print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 J - JOURNEY
@@ -386,50 +454,32 @@ Q - QUIT""")
                     next_location = self.journey(destination[0], destination[1])
                     return next_location
             elif response == "T":
-                self.meeting1()
+                if self.hero.missions[3] == False:
+                    self.meeting1()
+                else:
+                    print("\"The King cannot be seen right now.\"")
             elif response == "I":
                 self.inv_function()
             elif response == "R":
-                print("\"You can't rest here.  This is the King's Court!\"")
+                self.rest()
             elif response == "G":
                 print("save")
             elif response == "Q":
-                next_location = None
+                return None
             else:
                 print("\a")
 
-        return next_location
+        return None
+
+    def rest(self):
+        print("\"You can't rest here.  This is the King's Court!\"")
 
     def meeting1(self):
         """ King gives you Treasure Map """
         # Mission 3: Get a treasure map.
-        input("You introduce yourself as an ambassador in order to \
-gain audience with the King.")
-        print("King: Good morrow, young man.  What is it you seek?")
-        input(self.hero.name + ": Good King Vinny, I come on behalf of \
- Shmucksburg.  We are robbed incessantly.  And since our armory was \
- ransacked last year, we are utterly unable to defend ourselves.  I \
- request guards or perhaps armaments with which to defend our poor village.")
-        input("King: My good man, this entire kingdom is poor!  At \
-least it will be if we cannot regain Silverrock....  As of now, \
-nearly all of my guards are preparing to march west to rid Silverrock of its\
- orcish pests.  How, then, could I supply your village with guards\
- or armaments?  I am sorry good sir, but I must send you away empty-\
- handed.")
-        input(self.hero.name + ": I will fight with your men if you promise to help me.")
-        input("King: Are you offering me an ultimatem?!  If you are indeed \
-a warrior, then I order you to fight for me!  In fact, I have a specific \
-task for you:")
-        input("Go to the Valley of Forbidden Objects.  There is treasure \
-there with which we could bribe the orcs.  I'm afraid \
-they have grown dangerously armed and organized.  I would rather give \
-them buried treasure than waste my men on them.  Here is a map.  Dig \
-up the chest at the end of the valley.  Give it to the orcs as payment.\
-  Since you fancy yourself an ambassador, I'll leave convincing them to \
-take it up to you.")
-        input("I am sending trusted servants with you.  They will watch \
-and make sure you do not steal the treasure.  If you accomplish \
-what I ask, I will see what I can do for Shmucksburg.  Now make haste.")
+        for message in messages.oldendrab1:
+            paragraph = message.replace("Hero", self.hero.name)
+            input(paragraph + "\n")
         self.hero.inventory.append(items.t_map)
         self.hero.missions[3] = True
         input("You get:\n\tTreasure Map")
@@ -441,8 +491,10 @@ cowhip = Cowhip()
 valley = Valley_End()
 wrathful = Wrathful()
 oldendrab = Oldendrab()
+silverrock = Silverrock()
 
-all_locations = (shmucksburg, fiddlestick, cowhip, valley, wrathful, oldendrab)
+all_locations = (shmucksburg, fiddlestick, cowhip, valley, wrathful, oldendrab,
+                 silverrock)
 
 
 if __name__ == "__main__":

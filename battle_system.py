@@ -56,6 +56,34 @@ class Battle(object):
         else:
             print("You escape with your life.\n")
 
+class War(object):
+    def __init__(self, good_guys, mission_data):
+        self.good_guys = good_guys
+        self.mission_data = mission_data
+        self.goods_health = 0
+        self.bads_health = 0
+        self.battle()
+
+    def battle(self):
+        # Each army attacks each other.  Then the remaining health is totaled.
+        for i in range(0, 7):
+            good_guys[i].attack(bad_guys[i])
+            bad_guys[i].attack(good_guys[i])
+            
+            self.goods_health += good_guys[i].health
+            self.bads_health += bad_guys[i].health
+            
+        both = (self.goods_health, self.bads_health)
+
+        # If there is a tie, winner chosen randomly
+        if self.goods_health == self.bads_health:
+            winner = random.choice(both)
+        # Otherwise, winner is whoever has more health left
+        else:
+            winner = max(both)
+
+        return winner
+
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
     input("Press enter to exit.")

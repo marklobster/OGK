@@ -49,7 +49,8 @@ class Path(object):
                     print(message)
                     battle = battle_system.Battle(self.hero, monster)
                     if self.hero.health:
-                        print("Your journey continues.  Press 'I' at any time to use items.")
+                        print("Your journey continues.  Press 'I' at any \
+time to use an item.")
 
                 # Or if occurence != monster, update message, print message
                 else:
@@ -118,12 +119,11 @@ class South(Path):
 class West(Path):
     """ Connects Shmucksburg to Valley of Forbidden Objects """
     def __init__(self):
-        self.distance = 4
+        self.distance = 3
         self.fight_chance = 70
 
     def monster_pick(self):
         monster_pool = (monsters.Ancient_Technology(),
-                        monsters.Orc(),
                         monsters.Goblin(),
                         monsters.Hungry_Spider())
         return random.choice(monster_pool)

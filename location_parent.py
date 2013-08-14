@@ -22,7 +22,7 @@ class Location(object):
     def menu(self):
         """ Run the menu and return the next_location """
         response = ""
-        while response != "Q":
+        while self.hero.health:
             print("\nYOU ARE IN " + self.name.upper() + ".")
             print("""
 J - JOURNEY
@@ -52,16 +52,16 @@ Q - QUIT""")
             elif response == "I":
                 self.inv_function()
             elif response == "R":
-                print("Inn")
+                self.rest()
             elif response == "G":
                 print("save")
             elif response == "Q":
-                next_location = None
+                return None
             else:
                 print("\a")
 
         # next_location is returned to the game.main_loop
-        return next_location
+        return None
 
     # Menu functions
     def get_destination(self):
@@ -89,6 +89,20 @@ run with the appropriate path and endpoint."""
                 self.hero.use_item(item, self.hero)
             else:
                 input("You cannot use this here.")
+
+    def rest(self):
+        """ Allows hero to rest at an inn. """
+        price = 20
+        answer = input("\"Welcome to the " + self.name + " inn!  \
+A room costs " + str(price) + " silver.  Care to rest a while?\" (y/n) ").lower()
+        if answer == "y":
+            if self.hero.coins >= price:
+                print("\"Have a nice stay\"!")
+                self.hero.coins -= price
+                self.hero.gain_health(50)
+                print(self.hero.name + " gains 50 health!")
+            else:
+                print("\"I'm sorry sir, but you haven't enough silver.\"")
 
 # Shop functions
     def shop_menu(self):
@@ -118,7 +132,10 @@ X - Exit
     def show_inventory(self):
         print("ITEM\t\tPRICE\tCLASS\tDESCRIPTION")
         for item in self.inventory:
-            print(item.name + "\t" + str(item.price) + "\t" + item.item_class + "\t" + item.description)
+            if len(item.name) < 8:
+                print(item.name + "\t\t" + str(item.price) + "\t" + item.item_class + "\t" + item.description)
+            else:
+                print(item.name + "\t" + str(item.price) + "\t" + item.item_class + "\t" + item.description)
             
     def hero_purchase(self):
         self.show_inventory()
@@ -149,11 +166,11 @@ X - Exit
         item = input("\"What would ye like to sell?\" ").lower()
 
         # If item does not exist, converter will print appropriate message
-        # and neither if nor elif part of branch are executed.
+        # and hero_sell() function will end.
         item = converter.convert(item)
 
-        # If hero has the item, calculate sale price
-        if item in self.hero.inventory:
+        # If hero has the item and the item does not belong to the King, commence sale.
+        if item in self.hero.inventory and item.name != "Treasure Map" and item.name != "King's Loot":
             sale_price = int(item.price * 0.8)
             print("\"I'll offer you " + str(sale_price) + " silver.\"")
             response = input("Is that agreeable to you?\" (y/n) ").upper()
@@ -171,6 +188,10 @@ X - Exit
             # If response is invalid, end function
             else:
                 print("\a\"What?\"")
+
+        # If the item is in hero's inventory, but does not belong to him, reject sale.
+        elif item in self.hero.inventory:
+            print("You can't sell that -- it belongs to the King!")
 
         # If item does exist but is not in inventory, end function
         elif item != False:

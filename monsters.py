@@ -165,7 +165,8 @@ class Hydra_Badger(Medium_Monster):
         number = random.randint(1, 4)
         if number == 4:
             self.attack(opponent)
-            self.attack(opponent)
+            if opponent.health:
+                self.attack(opponent)
         else:
             self.attack(opponent)
 
@@ -282,6 +283,7 @@ class Simon_Slick(Boss):
         self.weapon = items.battle_axe
         self.shield = items.wood_shield
         self.armor = items.handmedowns
+        self.coins = 20
         self.inventory = [items.battle_axe, items.wood_shield,
                           items.handmedowns, items.bandage,
                           items.herbenol]
@@ -309,17 +311,19 @@ class Guillek(Boss):
         self.weapon = items.rusty_sword
         self.shield = items.sturdy_shield
         self.armor = items.handmedowns
+        self.coins = 22
         self.inventory = [items.rusty_sword, items.rusty_sword,
                           items.wood_shield, items.wood_shield,
                           items.handmedowns, items.first_aid]
 
     def tactic(self, opponent):
         self.attack(opponent)
-        self.attack(opponent)
+        if opponent.health:
+            self.attack(opponent)
 
     def die(self):
         self.dead = True
-        print("Guilleck the Mighty falls to the ground.")
+        print("Guillek the Mighty falls to the ground.")
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")

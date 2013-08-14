@@ -74,19 +74,20 @@ def opening_menu():
             import items
             hero = characters.New_Hero("Bob", "Hooray!")
             hero.missions = [True, True, True, True, False, False]
-            hero.weapon = items.rusty_sword
-            hero.shield = items.wood_shield
-            hero.armor = items.leather
+            hero.weapon = items.shiny_sword
+            hero.shield = items.sturdy_shield
+            hero.armor = items.sweet_armor
             hero.coins = 100
-            hero.inventory = [items.bandage,
-                              items.rusty_sword,
-                              items.wood_shield,
-                              items.leather,
+            hero.inventory = [items.herbenol,
+                              items.shiny_sword,
+                              items.sturdy_shield,
+                              items.sweet_armor,
+                              items.kings_loot,
                               items.t_map
                               ]
             for i in range(1, 7):
                 hero.inventory.append(items.bandage)
-            game = New_game(hero, locations.shmucksburg)
+            game = New_game(hero, locations.silverrock)
 
 def main():
     title()
