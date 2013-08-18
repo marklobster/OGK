@@ -5,6 +5,7 @@
 
 import random, battle_system, monsters
 
+from user_input import prompt
 
 # Path parent class, followed by sub-classes for each village
 class Path(object):
@@ -20,7 +21,7 @@ class Path(object):
         for segment in range(self.distance):
             if self.hero.health:
                 # Opportunity to use item
-                entry = input("").upper()
+                entry = prompt("").upper()
                 while entry == "I":
                     self.hero.inventory_menu()
                     item = self.hero.item_pick()
@@ -28,7 +29,7 @@ class Path(object):
                         self.hero.use_item(item, self.hero)
                     if entry == "I":
                         print("\nPress 'I' to use another item.")
-                    entry = input("").upper()
+                    entry = prompt("").upper()
 
                 # Start message string, get occurence
                 message = ""
@@ -177,4 +178,4 @@ all_paths = (north, east, south, west, northeast, northwest, mountain_road)
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

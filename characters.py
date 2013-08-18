@@ -3,6 +3,9 @@
 # April 2013
 
 import items, random, converter
+
+from user_input import prompt
+
 class Character(object):
     """ The super class for Hero and for Monster """
     def __init__(self, name, health_max, weapon, shield, armor):
@@ -94,7 +97,7 @@ class Character(object):
             enemy.damage(the_hurt)
 
     def win(self):
-        input("Tis a bad day to be a hero....\n")
+        prompt("Tis a bad day to be a hero....\n")
 
     def tactic(self, opponent):
         """ The default battle tactic executed within the battle loop. """
@@ -135,7 +138,7 @@ class Hero(Character):
     # ~~~ !!! ~~~ !!! 
 
     def item_pick(self):
-        item = input("Select an item to use or equip or press 'enter' to \
+        item = prompt("Select an item to use or equip or press 'enter' to \
 exit.\n").lower()
         item = converter.convert(item)
         return item
@@ -194,7 +197,7 @@ exit.\n").lower()
 A - Attack
 I - Item
 R - Run Away""")
-            choice = input("").upper()
+            choice = prompt("").upper()
             if choice == "A":
                 self.attack(opponent)
                 end_turn = True
@@ -212,7 +215,7 @@ R - Run Away""")
                 end_turn = True
 
     def win(self):
-        input("\"" + self.catchphrase + "\"")
+        prompt("\"" + self.catchphrase + "\"")
 
 class New_Hero(Hero):
     def __init__(self, name, catchphrase):
@@ -301,5 +304,5 @@ class Militia(object):
         
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")
 

@@ -1,3 +1,5 @@
+from user_input import prompt
+
 # Messages to be imported for 'Oh Great Knight' locations
 
 shmucksburg = ("Aye!  The brigands robbed me again!  What this village needs is a guardian!",
@@ -93,4 +95,4 @@ army pursues the orcs as you enter Silverrock to a chorus of cheers.")
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

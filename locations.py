@@ -4,6 +4,7 @@
 
 import location_parent, paths, items, messages
 
+from user_input import prompt
 
 class Shmucksburg(location_parent.Location):
     def __init__(self):
@@ -14,7 +15,7 @@ class Shmucksburg(location_parent.Location):
         self.sort_donations()
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 N) Fiddlestick
 E) Cow-Hip
@@ -42,7 +43,7 @@ W) Valley of Forbidden Objects
 
     def south_path(self):
         """ Make sure the user really wants to travel this path. """
-        answer = input("That is a very dangerous path.  Are you sure \
+        answer = prompt("That is a very dangerous path.  Are you sure \
 you want to proceed? (y/n) ").lower()
         if answer == "y":
             return (paths.south, wrathful)
@@ -58,12 +59,12 @@ come along?  I could certainly use the protection since I'll be \
 transporting these goods.\"")
         answer = ""
         while answer != "y" and answer != "n":
-            answer = input("\nWhat do you say? (y/n) ").lower()
+            answer = prompt("\nWhat do you say? (y/n) ").lower()
             if answer == "y":
                 self.hero.missions[1] = True
-                input("\"Many thanks!  I will repay you when we arrive.\"")
+                prompt("\"Many thanks!  I will repay you when we arrive.\"")
             elif answer == "n":
-                input("\"Okay.  Well I guess I'll just hire someone else.\"")
+                prompt("\"Okay.  Well I guess I'll just hire someone else.\"")
             self.hero.missions[0] = True
     
     def menu(self):
@@ -80,7 +81,7 @@ R - REST
 G - GAME SAVE
 Q - QUIT
 """)
-            response = input("").upper()
+            response = prompt("").upper()
             if response == "J":
                 destination = self.get_destination()
                 if destination:
@@ -113,7 +114,7 @@ Q - QUIT
     def rest(self):
         print("You go home to rest.")
         self.hero.gain_health(70)
-        input(self.hero.name + " gains 70 HP.")
+        prompt(self.hero.name + " gains 70 HP.")
 
     def donation_menu(self):
         response = ""
@@ -126,7 +127,7 @@ V - View Contents
 D - Donate
 X - Exit
 """)
-            response = input("\"Are we feeling philanthropic today?\" ").upper()
+            response = prompt("\"Are we feeling philanthropic today?\" ").upper()
             if response == "V":
                 print("ITEM\t\tCLASS")
                 for item in self.donations:
@@ -134,7 +135,7 @@ X - Exit
             elif response == "D":
                 self.donate()
             elif response == "X":
-                input("\"Have a grand day!\"\n")
+                prompt("\"Have a grand day!\"\n")
             else:
                 print("\"Could you repeat that?\"\a")
 
@@ -144,7 +145,7 @@ X - Exit
         # Get item
         import converter
         self.hero.inventory_menu()
-        item = input("Select a weapon, shield or armor to donate.  Or \
+        item = prompt("Select a weapon, shield or armor to donate.  Or \
 press enter to exit. ").lower()
         item = converter.convert(item)
 
@@ -154,13 +155,13 @@ press enter to exit. ").lower()
                 self.donations.append(item)
                 self.hero.drop(item)
                 self.sort_donations()
-                input("\"Thank you for your donation.\"")
+                prompt("\"Thank you for your donation.\"")
             else:
-                input("You don't have one!")
+                prompt("You don't have one!")
 
         # If item is a real item but is not in the above classes, do not accept.
         elif item != False:
-            input("That type of item is not needed.")
+            prompt("That type of item is not needed.")
 
     def sort_donations(self):
         """ Sort armory by each item's item_class attribute """
@@ -184,7 +185,7 @@ class Fiddlestick(location_parent.Location):
             self.messages = messages.fiddlestick[3:5]
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 NW) Silverrock
 NE) Oldendrab Castle
@@ -212,7 +213,7 @@ class Cowhip(location_parent.Location):
         self.messages = messages.cow_hip[:1]
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 W) Shmucksburg
 \nEnter the direction or location.  Or press enter to exit.
@@ -235,9 +236,9 @@ W) Shmucksburg
             self.hero.missions[2] = True
             if self.hero.missions[1] == True:
                 reward = 18
-                input("\n\"Thank you for your protection!  Here is your reward.\"")
+                prompt("\n\"Thank you for your protection!  Here is your reward.\"")
                 print("You gain: ")
-                input("\t" + str(reward) + " coins")
+                prompt("\t" + str(reward) + " coins")
                 self.hero.coins += reward
                 if items.leather not in self.inventory:
                     self.inventory.append(items.leather)
@@ -251,7 +252,7 @@ class Valley_End(location_parent.Location):
                           items.rare_coin]
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 E) Shmucksburg
 """).lower()
@@ -276,7 +277,7 @@ I - INVENTORY
 R - REST
 G - GAME SAVE
 Q - QUIT""")
-            response = input("").upper()
+            response = prompt("").upper()
             if response == "J":
                 destination = self.get_destination()
                 if destination:
@@ -320,23 +321,23 @@ Q - QUIT""")
         # self.hero.time += 1
 
     def arrival1(self):
-        input("King's Servant: " + self.hero.name + ", the journey has \
+        prompt("King's Servant: " + self.hero.name + ", the journey has \
 been dangerous thus far.  Please take this.  You may need it.")
-        input("You get:\n\tHerbenol")
+        prompt("You get:\n\tHerbenol")
         self.hero.inventory.append(items.herbenol)
 
     def boss1(self):
         print("You dig where the map directs you to dig.")
-        input("And you find:\n\t" + items.kings_loot.name)
+        prompt("And you find:\n\t" + items.kings_loot.name)
         self.hero.inventory.append(items.kings_loot)
         self.hero.inventory.remove(items.t_map)
-        input("King's First Servant: I see that much of this treasure was made by \
+        prompt("King's First Servant: I see that much of this treasure was made by \
 orcs.  Perhaps Good King Vinny is trying to make amends by returning goods \
 taken during one of the old wars.")
-        input("King's Second Servant: I don't believe the orcs would even \
+        prompt("King's Second Servant: I don't believe the orcs would even \
 realize....  What ho!  Who goes there!?\n")
-        input("\nYou turn around to find that a stranger has snuck up on you!")
-        input("Prepare for battle!\n")
+        prompt("\nYou turn around to find that a stranger has snuck up on you!")
+        prompt("Prepare for battle!\n")
         import battle_system, monsters
         boss = monsters.Simon_Slick()
         battle = battle_system.Battle(self.hero, boss)
@@ -352,7 +353,7 @@ class Wrathful(location_parent.Location):
         self.name = "Wrathful Pass"
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 N) Shmucksburg
 """).lower()
@@ -382,7 +383,7 @@ class Silverrock(location_parent.Location):
             self.hero.inventory.remove(items.kings_loot)
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 SE) Fiddlestick
 """).lower()
@@ -397,23 +398,23 @@ SE) Fiddlestick
 
     def boss2(self):
         for i in range(0, 8):
-            input(messages.boss2[i] + "\n")
+            prompt(messages.boss2[i] + "\n")
         import battle_system, monsters
         boss = monsters.Guillek()
         battle_system.Battle(self.hero, boss)
         if self.hero.health:
             for i in range(8, 10):
-                input(messages.boss2[i] + "\n")
+                prompt(messages.boss2[i] + "\n")
             self.hero.missions[5] = True
 
     def shortcut(self):
         for i in range(0, 2):
-            input(messages.shortcut[i] + "\n")
+            prompt(messages.shortcut[i] + "\n")
         import battle_system, monsters
         boss = monsters.Guillek()
         battle_system.Battle(self.hero, boss)
         if self.hero.health:
-            input(messages.shortcut[2] + "\n")
+            prompt(messages.shortcut[2] + "\n")
             self.hero.missions[5] = True
     
 
@@ -422,7 +423,7 @@ class Oldendrab(location_parent.Location):
         self.name = "Castle Oldendrab"
 
     def get_destination(self):
-        response = input("""
+        response = prompt("""
 Where shall you journey?
 SW) Fiddlestick
 """).lower()
@@ -447,7 +448,7 @@ I - INVENTORY
 R - REST
 G - GAME SAVE
 Q - QUIT""")
-            response = input("").upper()
+            response = prompt("").upper()
             if response == "J":
                 destination = self.get_destination()
                 if destination:
@@ -479,10 +480,10 @@ Q - QUIT""")
         # Mission 3: Get a treasure map.
         for message in messages.oldendrab1:
             paragraph = message.replace("Hero", self.hero.name)
-            input(paragraph + "\n")
+            prompt(paragraph + "\n")
         self.hero.inventory.append(items.t_map)
         self.hero.missions[3] = True
-        input("You get:\n\tTreasure Map")
+        prompt("You get:\n\tTreasure Map")
 
 # Initialize locations
 shmucksburg = Shmucksburg()
@@ -499,4 +500,4 @@ all_locations = (shmucksburg, fiddlestick, cowhip, valley, wrathful, oldendrab,
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

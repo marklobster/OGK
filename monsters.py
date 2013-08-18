@@ -4,6 +4,8 @@
 
 import characters, random, items
 
+from user_input import prompt
+
 # Item packets for monsters
 easy_monsters = (items.bandage, items.wood_shield)
 medium_monsters = (items.bandage, items.rusty_sword, items.wood_shield, items.handmedowns)
@@ -114,7 +116,7 @@ class Pretty_Blob(Easy_Monster):
         super(Pretty_Blob, self).__init__()
 
     def win(self):
-        input("Pretty Blob gives you a big kiss.")
+        prompt("Pretty Blob gives you a big kiss.")
 
 class Sir_Rat(Easy_Monster):
     def __init__(self):
@@ -211,7 +213,7 @@ class Hungry_Spider(Medium_Monster):
         super(Hungry_Spider, self).__init__()
 
     def win(self):
-        input(self.name + " decides she wasn't hungry after all!")
+        prompt(self.name + " decides she wasn't hungry after all!")
 
 
 # Hard Monsters
@@ -236,7 +238,7 @@ class Ogre_Primo(Hard_Monster):
         super(Ogre_Primo, self).__init__()
 
     def win(self):
-        input(self.name + " was having so much fun he tries to put you back together.")
+        prompt(self.name + " was having so much fun he tries to put you back together.")
 
     def die(self):
         self.dead = True
@@ -327,4 +329,4 @@ class Guillek(Boss):
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

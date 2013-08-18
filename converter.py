@@ -1,6 +1,8 @@
 # Converter dictionary and convert() method for 'Oh Great Knight'
 import items
 
+from user_input import prompt
+
 # Convertor dictionary contains commonly used string abbreviations for items
 # and the constant (item) the string refers to.
 converter = {"": False,
@@ -40,4 +42,4 @@ def convert(term):
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'")
-    input("Press enter to exit")
+    prompt("Press enter to exit")
