@@ -9,13 +9,14 @@
 # Outcome: Victory (gain assets), loss (death), or run away
 
 import random
+from user_input import prompt
 
 class Battle(object):
     def __init__(self, hero, monster):
         """ Constructor function initiates battle sequence. """
         self.hero = hero
         self.monster = monster
-        input("\n\n\t\t\t" + self.hero.name + " vs. " + self.monster.name + "\n")
+        prompt("\n\n\t\t\t" + self.hero.name + " vs. " + self.monster.name + "\n")
         self.first_strike = self.get_first_strike()
         self.battle_loop()
 
@@ -23,7 +24,7 @@ class Battle(object):
         """ First strike chosen at random """
         opponents = (self.hero, self.monster)
         first_strike = random.choice(opponents)
-        input(first_strike.name + " strikes first!\n")
+        prompt(first_strike.name + " strikes first!\n")
         return first_strike
            
           
@@ -86,4 +87,4 @@ class War(object):
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

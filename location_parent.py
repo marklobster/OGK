@@ -4,6 +4,8 @@
 
 import converter
 
+from user_input import prompt
+
 class Location(object):
     """ Super class for location objects in 'locations' file """
 
@@ -32,7 +34,7 @@ I - INVENTORY
 R - REST
 G - GAME SAVE
 Q - QUIT""")
-            response = input("").upper()
+            response = prompt("").upper()
             if response == "J":
                 # Ask for next location via get_destination() method
                 destination = self.get_destination()
@@ -88,12 +90,12 @@ run with the appropriate path and endpoint."""
             if item.personal_use == True:
                 self.hero.use_item(item, self.hero)
             else:
-                input("You cannot use this here.")
+                prompt("You cannot use this here.")
 
     def rest(self):
         """ Allows hero to rest at an inn. """
         price = 20
-        answer = input("\"Welcome to the " + self.name + " inn!  \
+        answer = prompt("\"Welcome to the " + self.name + " inn!  \
 A room costs " + str(price) + " silver.  Care to rest a while?\" (y/n) ").lower()
         if answer == "y":
             if self.hero.coins >= price:
@@ -117,9 +119,9 @@ I - View Inventory
 X - Exit
 """)
             print("Silver: " + str(self.hero.coins))
-            option = input("What can I do for ye?\n").upper()
+            option = prompt("What can I do for ye?\n").upper()
             if option == "X":
-                input("\"Good day to you sir!\"\n")
+                prompt("\"Good day to you sir!\"\n")
             elif option == "P":
                 self.hero_purchase()
             elif option == "S":
@@ -140,7 +142,7 @@ X - Exit
     def hero_purchase(self):
         self.show_inventory()
         print("\"Which would ye like to purchase?\"")
-        item = input("")
+        item = prompt("")
         item = converter.convert(item)
 
         # Check if item is a real item.
@@ -163,7 +165,7 @@ X - Exit
     def hero_sell(self):
         # Show inventory, input item to sell
         self.hero.inventory_menu()
-        item = input("\"What would ye like to sell?\" ").lower()
+        item = prompt("\"What would ye like to sell?\" ").lower()
 
         # If item does not exist, converter will print appropriate message
         # and hero_sell() function will end.
@@ -173,7 +175,7 @@ X - Exit
         if item in self.hero.inventory and item.name != "Treasure Map" and item.name != "King's Loot":
             sale_price = int(item.price * 0.8)
             print("\"I'll offer you " + str(sale_price) + " silver.\"")
-            response = input("Is that agreeable to you?\" (y/n) ").upper()
+            response = prompt("Is that agreeable to you?\" (y/n) ").upper()
 
             # If sale price is accepted, commence sale
             if response == "Y":
@@ -200,4 +202,4 @@ X - Exit
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

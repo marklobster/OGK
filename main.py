@@ -21,6 +21,7 @@
 
 import characters, locations, paths, introduction
 
+from user_input import prompt
 
 class New_game(object):
     def __init__(self, hero, location):
@@ -50,7 +51,7 @@ def title():
     print("\t\t\tOh Great Knight!")
     print("\t\t\t****************")
     print("\nby Mark Lauber\n\n")
-    input("Press enter to begin.\n\n")
+    prompt("Press enter to begin.\n\n")
 
 def opening_menu():
     choice = ""
@@ -60,7 +61,7 @@ def opening_menu():
         print("N - New Game")
         print("Q - Quit")
         print("T FOR TESTING!!!!")
-        choice = input("").upper()
+        choice = prompt("").upper()
         if choice == "R":
             print("LOAD")
         elif choice == "N":
@@ -95,4 +96,4 @@ def main():
 
 # Execute main()
 main()
-input("Thanks for playing!")
+prompt("Thanks for playing!")
