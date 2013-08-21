@@ -1,3 +1,5 @@
+from user_input import prompt
+
 # Messages to be imported for 'Oh Great Knight' locations
 
 shmucksburg = ("Aye!  The brigands robbed me again!  What this village needs is a guardian!",
@@ -8,7 +10,10 @@ shmucksburg = ("Aye!  The brigands robbed me again!  What this village needs is 
                "Mommy, can I go to the Valley of Ferdidden Objects?",
                "No, dear!  That place is dangerous!",
                "But they say that there's treasure there!",
-               "Yes.  And treasure attracts robbers.  Besides, one would only bury something there if they thought it was cursed!"
+               "Yes.  And treasure attracts robbers.  Besides, one would only bury something there if they thought it were cursed!",
+               "You captured Simon the Slick!  You truly are a hero!",
+               "But there are more wanted men out there.  May they be brought to \
+to justice!",
                )
 
 cow_hip = ("Welcome to Cow-Hip!  Sure, we seem to be the butt of every joke.  But in my opinion we have the best fresh dairy air!",
@@ -16,14 +21,14 @@ cow_hip = ("Welcome to Cow-Hip!  Sure, we seem to be the butt of every joke.  Bu
            )
 
 fiddlestick = ("Are you heading northeast to Castle Oldendrab?  Do you have an audience with the King?",
-               "There is much wealth up north.  Both in Silverrock and in Oldendrab.",
+               "There is much wealth up north.  Both in Silverrock and at Oldendrab.",
                "Have you heard the terrible news?  Silverrock has been invaded by an army of orcs!",
                "Hooray!  Silverrock is free!  Hooray!  We surely would have been taken next!",
                "There he is!  That guy with the mask saved Silverrock!"
                )
 
 silverrock = ("We are saved!  Long live King Vinny!",
-              "We're safe once again!  At least until Monster Season :("
+              "We're safe once again!  At least until Monster Season :( "
               )
 
 oldendrab1 = ("You introduce yourself as an ambassador in order to gain audience with the King.",
@@ -53,6 +58,44 @@ and make sure you do not steal the treasure.  If you accomplish \
 what I ask, I will see what I can do for Shmucksburg.  Now make haste."
              )
 
+oldendrab2 = ("The guards recognize you and let you in right away.",
+              "King: Good day to you, hero.  I understand that you were a \
+great help to my men.  As I promised, here is a gift for your fellow \
+villagers:",
+              "hero: Thank you sir for your aid.  I would gratefully offer you \
+my service if you ever require it again.",
+              "King: In fact I do have another request!  As we all know, when \
+the icy grip of winter thaws and before the blossoms of Spring can bloom, \
+Monster Season rears its ugly head.  I need someone to \
+explore where the monsters come from: Upheaval Mountain, just north of Silverrock.  \
+My hope is that you can thin out the monsters somewhat before they \
+come down here to forage.  I know this is a dangerous mission, so I understand \
+if you do not wish to accept it.",
+              "hero: I accept your mission.  I will explore the origin of the \
+frost monsters!  I will --",
+              "King: Excellent!  Unfortunately I cannot send help with you, because I \
+promised my guards three weeks paid vacation if they freed Silverrock.  But \
+since you don't technically work for me, we don't have to worry about that.  \
+So anyway, please take this.  You may need it!"
+              )
+
+shortcut = ("You approach Silverrock.  You see that an army of orcs has \
+encamped just outside the village.  Before you can make it to the gate, \
+a very tall orc makes a move to intercept you.",
+            "\nPrepare for battle!\n",
+            "Dear user,\nYou were not supposed to be able to win this battle \
+yet, but you somehow managed to win out of pure luck.  Let's just say you beat \
+the game.  Good job.")
+
+boss1 = ("You dig where the map directs you.",
+         "King's Servant 1: I see that much of this treasure was made by \
+orcs.  Perhaps Good King Vinny is trying to make amends by returning goods \
+taken during one of the old wars.",
+         "King's Servant 2: I don't believe the orcs would even \
+realize....  What ho!  Who goes there!?",
+         "\nYou turn around to find that a stranger has snuck up on you!",
+         "Prepare for battle!\n")
+
 boss2 = ("\nAs you approach Silverrock, you see two encampments facing each other \
 with the helpless village close by.  One of the King's servants hoists a \
 negotiator's flag as you approach the orc general's tent.  As you draw near, \
@@ -60,7 +103,7 @@ you see a half-dozen nasty orcs surrounding one who is nearly a foot taller \
 than the rest.  He is known as Guillek the Mighty, for he has never been \
 harmed in combat.  He is the legend who has four arms, the upper of \
 which each holds a sword and the lower of which hold shields.  He looks toward the box of \
-treasure you had set down about fifteen yards from the tent.  The King's servants \
+treasure you had set down ten yards from the tent.  The King's servants \
 explain to him King Vinny's offer.  Guillek and two servants come out to examine \
 the box.",
          "Orc 1: Is it a bait-switch?",
@@ -81,16 +124,8 @@ here in Silverrock and let the King's men handle the rest of the orcs.  When \
 you have regained your strength, come see King Vinny!"
          )
 
-shortcut = ("You approach Silverrock.  You see that an army of orcs has \
-encamped just outside the village.  Before you can make it to the gate, \
-a very tall orc makes a move to intercept you.",
-            "\nPrepare for battle!\n",
-            "Your victory over the orcs' general is an unpleasant surprise \
-for the rest of the army.  But an even greater surprise had marched up to Silverrock \
-during the course of your battle.  Now with their general dead and having King \
-Vinny's army to deal with, the orcs panic and take to flight.  The King's \
-army pursues the orcs as you enter Silverrock to a chorus of cheers.")
+boss3 = ()
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

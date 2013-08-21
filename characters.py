@@ -3,6 +3,9 @@
 # April 2013
 
 import items, random, converter
+
+from user_input import prompt
+
 class Character(object):
     """ The super class for Hero and for Monster """
     def __init__(self, name, health_max, weapon, shield, armor):
@@ -94,7 +97,7 @@ class Character(object):
             enemy.damage(the_hurt)
 
     def win(self):
-        input("Tis a bad day to be a hero....\n")
+        prompt("Tis a bad day to be a hero....\n")
 
     def tactic(self, opponent):
         """ The default battle tactic executed within the battle loop. """
@@ -135,7 +138,7 @@ class Hero(Character):
     # ~~~ !!! ~~~ !!! 
 
     def item_pick(self):
-        item = input("Select an item to use or equip or press 'enter' to \
+        item = prompt("Select an item to use or equip or press 'enter' to \
 exit.\n").lower()
         item = converter.convert(item)
         return item
@@ -145,6 +148,9 @@ exit.\n").lower()
         self.show_missions()
         # ~~~ !!! ~~~ !!!
 
+        # Determine day number
+        day = round((self.time + 3)/3, 1)
+        
         # Show inventory
         self.display_inventory()
         print("")
@@ -166,6 +172,7 @@ exit.\n").lower()
         # Show other data
         print("Coins: " + str(self.coins))
         print("Health: " + str(self.health) + " / " + str(self.health_max))
+        print("Day: " + str(day))
         print("")
 
     def drop(self, item):
@@ -182,7 +189,13 @@ exit.\n").lower()
                 self.shield = None
             elif self.armor == item:
                 self.armor = None
-        
+
+    def get_stuff(self, items):
+        """ Use when hero aquires something.  'items' parameter must be iterable """
+        print("You get:")
+        for item in items:
+            print("\t", item.name)
+            self.inventory.append(item)
 
     def tactic(self, opponent):
         """ The hero's tactic method consists of the battle menu. """
@@ -194,7 +207,7 @@ exit.\n").lower()
 A - Attack
 I - Item
 R - Run Away""")
-            choice = input("").upper()
+            choice = prompt("").upper()
             if choice == "A":
                 self.attack(opponent)
                 end_turn = True
@@ -212,7 +225,7 @@ R - Run Away""")
                 end_turn = True
 
     def win(self):
-        input("\"" + self.catchphrase + "\"")
+        prompt("\"" + self.catchphrase + "\"")
 
 class New_Hero(Hero):
     def __init__(self, name, catchphrase):
@@ -234,72 +247,8 @@ class New_Hero(Hero):
         for i in range(0, 9):
             self.missions.append(False)
 
-class Besieger(Character):
-    """ Class for imaginary object that beseiges Shmucksburg while hero is away """
-    def __init__(self, hero, power, deflection, thickness):
-        self.hero = hero
-
-    def besiege(self, opponent):
-        self.health = 0
-        opponent.health = 0
-        for i in range(0, 2):
-            self.attack(opponent)
-            opponent.attack(self)
-        winner = max(self.health, opponent.health)
-
-class Soldier(Character):
-    """ Either a Defender or an Attacker of Shmucksburg """
-    def __init__(self):
-        self.weapon = None
-        self.shield = None
-        self.armor = None
-
-class Militia(object):
-    def __init__(self, armory, persons):
-        import items
-        self.armory = armory
-
-        # Instantiate warriors
-        self.warriors = []
-        for i in range(1, 8):
-            defender = Soldier()
-            self.warriors.append(defender)
-
-        # Equip warriors
-        for i in warriors:
-            
-            # Assign weapons
-            if items.shiny_sword in self.armory:
-                self.assign(i.weapon, items.shiny_sword)
-            elif items.battle_axe in self.armory:
-                self.assign(i.weapon, items.battle_axe)
-            elif items.rusty_sword in self.armory:
-                self.assign(i.weapon, items.rusty_sword)
-            elif items.cheap_dagger in self.armory:
-                self.assign(i.weapon, items.cheap_dagger)
-
-            # Assign shields
-            if items.sturdy_shield in self.armory:
-                self.assign(i.shield, items.sturdy_shield)
-            elif items.green_shield in self.armory:
-                self.assign(i.shield, items.green_shield)
-            elif items.wood_shield in self.armory:
-                self.assign(i.shield, items.wood_shield)
-
-            # Assign armor
-            if items.sweet_armor in self.armory:
-                self.assign(i.armor, items.sweet_armor)
-            elif items.leather in self.armory:
-                self.assign(i.armor, items.leather)
-            elif items.handmedowns in self.armory:
-                self.assign(i.armor, items.handmedowns)
-
-    def assign(self, equip_as, item):
-        """ Quickly equip weapon to person and remove from armory """
-        equip_as = item
-        self.armory.remove(item)
         
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")
 

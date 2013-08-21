@@ -5,6 +5,7 @@
 
 import random, battle_system, monsters
 
+from user_input import prompt
 
 # Path parent class, followed by sub-classes for each village
 class Path(object):
@@ -20,7 +21,7 @@ class Path(object):
         for segment in range(self.distance):
             if self.hero.health:
                 # Opportunity to use item
-                entry = input("").upper()
+                entry = prompt("").upper()
                 while entry == "I":
                     self.hero.inventory_menu()
                     item = self.hero.item_pick()
@@ -28,19 +29,19 @@ class Path(object):
                         self.hero.use_item(item, self.hero)
                     if entry == "I":
                         print("\nPress 'I' to use another item.")
-                    entry = input("").upper()
+                    entry = prompt("").upper()
 
                 # Start message string, get occurence
                 message = ""
                 occurence = random.randint(1, 100)
                 
                 # Determine time and day, add to message
-                if segment in range(0,20,3):
-                    message += "On the morning of day " + str(int((segment+3)/3))
-                elif segment in range(1,21,3):
-                    message += "On the afternoon of day " + str(int((segment+2)/3))
+                if self.hero.time %3 == 0:
+                    message += "On the morning of day " + str(int((self.hero.time+3)/3))
+                elif (self.hero.time + 2)%3 == 0:
+                    message += "On the afternoon of day " + str(int((self.hero.time+2)/3))
                 else:
-                    message += "On the evening of day " + str(int((segment+1)/3))
+                    message += "On the evening of day " + str(int((self.hero.time+1)/3))
 
                 # If occurence == monster, update message, print message, start battle
                 if occurence < self.fight_chance:
@@ -56,6 +57,9 @@ time to use an item.")
                 else:
                     message += " nothing happens."
                     print(message)
+
+                # Increment hero's time attribute    
+                self.hero.time += 1
                     
         # If hero is still alive, return the proper endpoint.
         if self.hero.health:
@@ -177,4 +181,4 @@ all_paths = (north, east, south, west, northeast, northwest, mountain_road)
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

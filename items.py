@@ -4,6 +4,9 @@
 
 import random
 
+from user_input import prompt
+
+
 # Item classes
 class Item(object):
     """ Any purchasable item """
@@ -95,7 +98,7 @@ class Treasure_map(Item):
         self.item_class = "N/A"
 
     def use(self, target):
-        input("The map shows where to dig at the valley's end.")
+        prompt("The map shows where to dig at the valley's end.")
 
 class Beartraplauncher(Item):
     def __init__(self):
@@ -156,7 +159,7 @@ flashing_ob = Weapon("Flashing Obelisk", 0, "Ancient Technology's Weapon", 15, N
 mandible = Weapon("Mandible", 0, "Hungry Spider's Weapon", 19, None)
 spikes = Weapon("Spikes", 0, "Orcupine's Weapon", 24, None)
 ugly_stick = Weapon("Ugly Stick", 0, "Ogre Primo's Weapon", 30, None)
-nunchuck = Weapon("Nunchuck", 0, "Ninja Bear's Weapon", 21, None)
+nunchucks = Weapon("Nunchuck", 0, "Ninja Bear's Weapon", 21, None)
 # Player-use weapons
 cheap_dagger = Weapon("Cheap Dagger", 30, "Pointy", 12, "W-0")
 rusty_sword = Weapon("Rusty Sword", 50, "A bargain sword for a bargain price.", 20, "W-1")
@@ -191,4 +194,4 @@ bear_trap = Bear_trap()
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")

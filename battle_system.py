@@ -9,13 +9,14 @@
 # Outcome: Victory (gain assets), loss (death), or run away
 
 import random
+from user_input import prompt
 
 class Battle(object):
     def __init__(self, hero, monster):
         """ Constructor function initiates battle sequence. """
         self.hero = hero
         self.monster = monster
-        input("\n\n\t\t\t" + self.hero.name + " vs. " + self.monster.name + "\n")
+        prompt("\n\n\t\t\t" + self.hero.name + " vs. " + self.monster.name + "\n")
         self.first_strike = self.get_first_strike()
         self.battle_loop()
 
@@ -23,7 +24,7 @@ class Battle(object):
         """ First strike chosen at random """
         opponents = (self.hero, self.monster)
         first_strike = random.choice(opponents)
-        input(first_strike.name + " strikes first!\n")
+        prompt(first_strike.name + " strikes first!\n")
         return first_strike
            
           
@@ -56,34 +57,83 @@ class Battle(object):
         else:
             print("You escape with your life.\n")
 
-class War(object):
-    def __init__(self, good_guys, mission_data):
-        self.good_guys = good_guys
-        self.mission_data = mission_data
-        self.goods_health = 0
-        self.bads_health = 0
-        self.battle()
+class Invasion(object):
+    def __init__(self, location):
+        """Create teams, do battle, return winner"""
+        self.good_guys = self.make_good_guys(location.donations)
+        self.bad_guys = self.make_bad_guys(location.hero.time)
+        print("goods:")
+        for num in self.good_guys:
+            print(str(num))
+        print("bads:")
+        for num in self.bad_guys:
+            print(str(num))
+        outcome = self.battle()
+        if outcome == "win":
+            location.gain += 10
+            location.wins += 1
+        else:
+            location.gain -= 100
+
+    def make_good_guys(self, inventory):
+        """Create tuple of stats for good_guys, based on donations inventory"""
+        import items
+        thickness = 0
+        deflection = 0
+        power = 0
+        for item in inventory:
+            if isinstance(item, items.Armor):
+                thickness += item.thickness
+            elif isinstance(item, items.Shield):
+                deflection += item.deflection
+            elif isinstance(item, items.Weapon):
+                power += item.power
+        stats = (thickness, deflection, power)
+        return stats
+
+    def make_bad_guys(self, time):
+        """Create tuple of stats for bad_guys based on hero.time number"""
+        thickness = 12 + time
+        deflection = 12 + time
+        power = 12 + time
+        stats = (thickness, deflection, power)
+        return stats
 
     def battle(self):
-        # Each army attacks each other.  Then the remaining health is totaled.
-        for i in range(0, 7):
-            good_guys[i].attack(bad_guys[i])
-            bad_guys[i].attack(good_guys[i])
-            
-            self.goods_health += good_guys[i].health
-            self.bads_health += bad_guys[i].health
-            
-        both = (self.goods_health, self.bads_health)
+        # Set variables
+        damage_to_good = 0
+        damage_to_bad = 0
 
-        # If there is a tie, winner chosen randomly
-        if self.goods_health == self.bads_health:
-            winner = random.choice(both)
-        # Otherwise, winner is whoever has more health left
+        # Each team attacks the other 3 times
+        for i in range(0, 3):
+            damage_to_bad += self.attack(self.good_guys, self.bad_guys)
+            damage_to_good += self.attack(self.bad_guys, self.good_guys)
+        print("damage to goods: " + str(damage_to_good))
+        print("damage to bads: " + str(damage_to_bad))
+        if damage_to_good <= damage_to_bad:
+            return "win"
         else:
-            winner = max(both)
+            return "lose"
 
-        return winner
+    def attack(self, attacker, defender):
+        # Set variables and battle ratings
+        variation = random.randint(0, 7)
+        chance = random.randint(1, 100)
+        attack_rating = attacker[2] + variation
+        deflection_rating = defender[1] / attacker[2] * 9
+        armor_rating = defender[0]
+
+        # If chance <= deflection_rating, attack is deflected
+        if chance <= deflection_rating:
+            print("deflected")
+            return 0
+
+        # Otherwise, damage is returned
+        else:
+            damage = attack_rating * 10 / armor_rating
+            print(str(damage))
+            return damage
 
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
-    input("Press enter to exit.")
+    prompt("Press enter to exit.")
