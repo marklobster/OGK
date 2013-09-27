@@ -159,7 +159,7 @@ flashing_ob = Weapon("Flashing Obelisk", 0, "Ancient Technology's Weapon", 15, N
 mandible = Weapon("Mandible", 0, "Hungry Spider's Weapon", 19, None)
 spikes = Weapon("Spikes", 0, "Orcupine's Weapon", 24, None)
 ugly_stick = Weapon("Ugly Stick", 0, "Ogre Primo's Weapon", 30, None)
-nunchucks = Weapon("Nunchuck", 0, "Ninja Bear's Weapon", 21, None)
+nunchuck = Weapon("Nunchuck", 0, "Ninja Bear's Weapon", 21, None)
 # Player-use weapons
 cheap_dagger = Weapon("Cheap Dagger", 30, "Pointy", 12, "W-0")
 rusty_sword = Weapon("Rusty Sword", 50, "A bargain sword for a bargain price.", 20, "W-1")

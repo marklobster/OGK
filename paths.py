@@ -58,7 +58,7 @@ time to use an item.")
                     message += " nothing happens."
                     print(message)
 
-                # Increment hero's time attribute    
+                # Increment hero's time attribute
                 self.hero.time += 1
                     
         # If hero is still alive, return the proper endpoint.

@@ -34,7 +34,7 @@ class Game(object):
         # Assign data to Shmucksburg
         locations.shmucksburg.resources = resources
         locations.shmucksburg.departure = departure
-
+        
         # Assign hero to each path as an attribute
         for i in paths.all_paths:
             i.hero = self.hero
@@ -44,7 +44,7 @@ class Game(object):
         self.main_loop()
 
     def main_loop(self):
-        while self.current_local != None:
+        while self.current_local:
             next_location = self.current_local.run()
             self.current_local = next_location
     
@@ -67,21 +67,21 @@ def opening_menu():
         print("T FOR TESTING!!!!")
         choice = prompt("").upper()
 
-        # Resume game
+        # Resume Game
         if choice == "R":
             print("LOAD")
 
-        # New game
+        # New Game
         elif choice == "N":
-            data = introduction.intro()
-            hero = characters.New_Hero(data[0], data[1])
+            hero_data = introduction.intro()
+            hero = characters.New_Hero(hero_data[0], hero_data[1])
             play_game = Game(hero, locations.shmucksburg, 50, 0)
 
         # For testing only!!!!!!!!
         elif choice == "T":
             import items
             hero = characters.New_Hero("Bob", "Hooray!")
-            hero.missions = [True, True, True, True, True, True, True, False]
+            hero.missions = [True, True, True, True, False, False]
             hero.weapon = items.shiny_sword
             hero.shield = items.sturdy_shield
             hero.armor = items.sweet_armor
@@ -89,10 +89,13 @@ def opening_menu():
             hero.inventory = [items.herbenol,
                               items.shiny_sword,
                               items.sturdy_shield,
-                              items.sweet_armor
+                              items.sweet_armor,
+                              items.kings_loot,
+                              items.t_map
                               ]
-
-            play_game = Game(hero, locations.shmucksburg, 50, 0)
+            for i in range(1, 7):
+                hero.inventory.append(items.bandage)
+            play_game = Game(hero, locations.silverrock, 50, 0)
 
 def main():
     title()

@@ -62,7 +62,7 @@ Q - QUIT""")
             else:
                 print("\a")
 
-        # If hero dies during self.menu(), return None to end game.main_loop() 
+        # next_location is returned to the game.main_loop
         return None
 
     # Menu functions

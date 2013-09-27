@@ -57,11 +57,12 @@ class Battle(object):
         else:
             print("You escape with your life.\n")
 
+
 class Invasion(object):
-    def __init__(self, location):
+    def __init__(self, inventory, time, gain):
         """Create teams, do battle, return winner"""
-        self.good_guys = self.make_good_guys(location.donations)
-        self.bad_guys = self.make_bad_guys(location.hero.time)
+        self.good_guys = self.make_good_guys(inventory)
+        self.bad_guys = self.make_bad_guys(time)
         print("goods:")
         for num in self.good_guys:
             print(str(num))
@@ -70,10 +71,9 @@ class Invasion(object):
             print(str(num))
         outcome = self.battle()
         if outcome == "win":
-            location.gain += 10
-            location.wins += 1
+            gain += 10
         else:
-            location.gain -= 100
+            gain -= 100
 
     def make_good_guys(self, inventory):
         """Create tuple of stats for good_guys, based on donations inventory"""
@@ -110,7 +110,7 @@ class Invasion(object):
             damage_to_good += self.attack(self.bad_guys, self.good_guys)
         print("damage to goods: " + str(damage_to_good))
         print("damage to bads: " + str(damage_to_bad))
-        if damage_to_good <= damage_to_bad:
+        if damage_to_good >= damage_to_bad:
             return "win"
         else:
             return "lose"
@@ -133,7 +133,7 @@ class Invasion(object):
             damage = attack_rating * 10 / armor_rating
             print(str(damage))
             return damage
-
+        
 if __name__ == "__main__":
     print("This is a module for 'Oh Great Knight'.")
     prompt("Press enter to exit.")

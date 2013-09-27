@@ -148,9 +148,6 @@ exit.\n").lower()
         self.show_missions()
         # ~~~ !!! ~~~ !!!
 
-        # Determine day number
-        day = round((self.time + 3)/3, 1)
-        
         # Show inventory
         self.display_inventory()
         print("")
@@ -172,7 +169,6 @@ exit.\n").lower()
         # Show other data
         print("Coins: " + str(self.coins))
         print("Health: " + str(self.health) + " / " + str(self.health_max))
-        print("Day: " + str(day))
         print("")
 
     def drop(self, item):
@@ -189,9 +185,8 @@ exit.\n").lower()
                 self.shield = None
             elif self.armor == item:
                 self.armor = None
-
+        
     def get_stuff(self, items):
-        """ Use when hero aquires something.  'items' parameter must be iterable """
         print("You get:")
         for item in items:
             print("\t", item.name)
